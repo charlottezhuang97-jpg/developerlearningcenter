@@ -1,0 +1,236 @@
+/* ================= Design tokens (see /ascenddesign-system/tokens/design-tokens.json) ================= */
+:root {
+  /* color */
+  --color-text-primary: #000000;
+  --color-text-secondary: rgba(0, 0, 0, 0.6);
+  --color-text-secondary-alt: rgba(51, 51, 51, 0.6);
+  --color-text-heading: #101828;
+  --color-text-muted: #99A1AF;
+  --color-text-dark-alt: #121417;
+  --color-bg-surface: #FFFFFF;
+  --color-bg-subtle: #F5F6FA;
+  --color-border-default: #E5E7EB;
+  --color-border-subtle: #F3F3F3;
+  --color-border-strong: #000000;
+  --color-brand-red: #DB0000;
+  --color-brand-red-dark: #C7000B;
+  --color-accent-purple: #A78BFA;
+
+  /* typography */
+  --font-sans: 'HarmonyOS Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --fw-regular: 400;
+  --fw-semibold: 600; /* HarmonyOS Medium.ttf loaded at weight 600 — see fontWeight.semibold in design-tokens.json */
+  --fw-bold: 700;
+
+  /* spacing */
+  --space-8: 8px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-32: 32px;
+  --space-40: 40px;
+
+  /* radius */
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-2xl: 24px;
+
+  /* shadow */
+  --shadow-sm: 0px 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ================= Fonts: HarmonyOS Sans SC ================= */
+/* Noto Sans SC 的 medium(500) 与 semibold(600) 字重角色已合并映射到 Medium.ttf，
+   在 font-weight:600 槽位加载（该字重族没有独立的 SemiBold 切片） */
+@font-face {
+  font-family: 'HarmonyOS Sans SC';
+  src: url('../fonts/HarmonyOS_Sans_SC_Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HarmonyOS Sans SC';
+  src: url('../fonts/HarmonyOS_Sans_SC_Medium.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'HarmonyOS Sans SC';
+  src: url('../fonts/HarmonyOS_Sans_SC_Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ================= Reset ================= */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--color-bg-subtle); }
+body { font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+a { text-decoration: none; }
+button { font-family: inherit; border: none; background: none; cursor: pointer; }
+
+/* ================= Page (fixed 1920px canvas, pixel-accurate to Figma) ================= */
+.page {
+  position: relative;
+  width: 1920px;
+  height: 2503px;
+  margin: 0 auto;
+  background: var(--color-bg-subtle);
+  overflow: hidden; /* clips content that bleeds above y=0 (banner visual), matching the Figma frame */
+}
+
+/* Section wrappers are NOT positioning contexts — every element inside them uses
+   coordinates measured relative to .page (the only positioned ancestor). Giving a
+   section its own position:absolute+top would double-apply that offset to its children. */
+
+.txt { position: absolute; font-family: var(--font-sans); white-space: pre-wrap; }
+.ph-img { position: absolute; object-fit: cover; display: block; }
+.box { position: absolute; }
+
+/* ================= Nav ================= */
+.nav {
+  position: absolute;
+  left: 0; top: 0; width: 1920px; height: 64px;
+  background: var(--color-bg-surface);
+  z-index: 10;
+}
+.nav-links { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+.nav-link {
+  position: absolute;
+  font-size: 16px;
+  line-height: 24px;
+  white-space: nowrap;
+  padding-bottom: var(--space-20);
+}
+
+/* ================= Banner ================= */
+.banner { position: static; }
+.banner-base {
+  position: absolute;
+  background: linear-gradient(90deg, #E1E7FF 0%, rgba(182, 197, 254, 0.05) 10.2%, rgba(221, 233, 255, 0.05) 88%, #DED1FD 96.2%);
+}
+.banner-fade {
+  position: absolute;
+  background: linear-gradient(180deg, rgba(244, 245, 247, 0) 0%, var(--color-bg-subtle) 100%);
+}
+.hero-copy .txt { position: absolute; }
+.search-bar {
+  position: absolute;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+}
+.search-icon {
+  position: absolute;
+  left: 21px; top: 18px;
+  width: 18px; height: 18px;
+  border: 1.6px solid var(--color-text-muted);
+  border-radius: 50%;
+}
+.search-icon::after {
+  content: '';
+  position: absolute;
+  right: -5px; bottom: -4px;
+  width: 6px; height: 1.6px;
+  background: var(--color-text-muted);
+  transform: rotate(45deg);
+  transform-origin: right center;
+}
+.search-placeholder {
+  position: absolute;
+  font-size: 14px;
+  line-height: 16.8px;
+  color: var(--color-text-muted);
+}
+.subnav { position: absolute; background: transparent; }
+.subnav-item { position: absolute; font-size: 16px; line-height: 19.2px; white-space: nowrap; }
+.float-btn {
+  position: absolute;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm), var(--shadow-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.float-btn span {
+  width: 16px; height: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--color-border-default);
+}
+
+/* ================= Buttons ================= */
+.btn {
+  position: absolute;
+  border-radius: var(--radius-xl);
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: var(--fw-semibold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-primary {
+  background: var(--color-text-primary);
+  border: 1px solid var(--color-text-primary);
+  color: var(--color-bg-surface);
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--color-text-primary);
+  color: var(--color-text-primary);
+}
+
+/* ================= Intro ================= */
+.intro { position: static; }
+.intro-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+}
+
+/* ================= Learn type (4-card row) ================= */
+.learn-type { position: static; }
+.learn-type-card-bg {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+}
+
+/* ================= Scenario header ================= */
+.scenario-head { position: static; }
+
+/* ================= Scenario category strip ================= */
+.scenario-strip { position: static; }
+.scenario-strip-top,
+.scenario-strip-bottom {
+  position: absolute;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.5));
+  backdrop-filter: blur(4px);
+}
+.scenario-tag-bg {
+  position: absolute;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+    linear-gradient(135deg, rgba(84, 120, 251, 0.9), rgba(152, 74, 246, 0.9));
+}
+
+/* ================= Course grid (2x2) ================= */
+.course-grid { position: static; }
+.course-card {
+  position: absolute;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+}
+.stat-icon { position: absolute; }
+
+/* ================= Footer visual ================= */
+.footer-visual { position: static; }
+.footer-accent { position: absolute; background: var(--color-text-dark-alt); }
