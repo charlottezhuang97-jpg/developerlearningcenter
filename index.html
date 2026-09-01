@@ -33,8 +33,9 @@
 <div class="txt" style="left:118.0px;top:185.0px;width:497.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">在开发者学习中心（Deep Learning Center）获取必须技能，通往成功</div>
 <div class="search-bar" style="left:108.0px;top:237.0px;width:900.0px;height:54.0px;">
 <span class="search-icon"></span>
-<span class="search-placeholder" style="left:51.0px;top:18.5px;">今天你想学点什么</span>
+<input type="text" class="search-input" id="searchInput" placeholder="今天你想学点什么" autocomplete="off" oninput="onSearchInput(this.value)" onfocus="onSearchFocus()">
 </div>
+<div class="search-panel" id="searchPanel" style="left:108px;top:303px;"></div>
 <div class="subnav" style="left:216.0px;top:343.0px;width:1488.0px;height:56.0px;">
 <span class="subnav-item" style="left:432.0px;top:18.0px;font-weight:600;color:var(--color-text-primary);">概览</span>
 <span class="subnav-item" style="left:496.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">查找学习资源</span>
@@ -245,6 +246,92 @@ function pickQuizOption(i){
     setTimeout(() => { qmStep = 'result'; renderQuizStep(); }, 1200);
   }
 }
+
+/* ================= 搜索下拉面板 =================
+   数据来源：Figma 节点 164:2712(初始面板) / 165:4366(激活面板，以「算子」为例的
+   搜索结果) / 165:5249(悬浮态，多一个「加入学习计划」按钮)。 */
+const QUICK_SEARCHES = ['算子开发基础', 'CANN 环境安装', 'Ascend C 入门', '模型推理优化', 'NPU 调试技巧', 'MindSpore 快速入门'];
+
+const SEARCH_RESULTS = [
+  { tag: '自主学习课程', tagColor: '#2E53FA', title: 'Ascend C 算子开发入门', desc: '从零掌握昇腾 Ascend C 算子编程模型，涵盖 Tiling 策略、核函数编写与调试全流程。', rating: '4.6', level: '初级', time: '3h', count: '2,841' },
+  { tag: '学习路径', tagColor: '#912EFA', title: '昇腾异构编程完整路径', desc: '从硬件架构、CANN 软件栈到算子开发，系统性掌握昇腾全栈开发能力。', rating: '4.8', level: '中级', time: '12h', count: '1,406' },
+  { tag: '讲师指导培训', tagColor: '#AF2EFA', title: '算子性能调优实战营', desc: '专家讲师带你分析真实业务场景中的算子瓶颈，掌握 Profile 工具与优化手段。', rating: '4.9', level: '高级', time: '2天', count: '380' },
+  { tag: '自主学习课程', tagColor: '#2E53FA', title: '自定义算子注册与部署', desc: '学习如何将自定义 Ascend C 算子集成到 PyTorch 与 MindSpore 框架中并完成推理部署。', rating: '4.5', level: '中级', time: '2.5h', count: '964' },
+  { tag: '讲师指导培训', tagColor: '#AF2EFA', title: 'CANN 算子开发工程师认证辅导班', desc: '对标华为官方认证考纲，精讲考点与实验，助力一次通过 HCIP-AI 算子方向认证。', rating: '4.7', level: '中级', time: '3天', count: '712' },
+];
+
+const addedPlans = new Set();
+
+function onSearchFocus(){
+  const val = document.getElementById('searchInput').value.trim();
+  renderSearchPanel(val);
+}
+function onSearchInput(val){
+  renderSearchPanel(val.trim());
+}
+
+function renderSearchPanel(query){
+  const panel = document.getElementById('searchPanel');
+  panel.classList.add('open');
+  if (!query) {
+    panel.className = 'search-panel open sp-initial';
+    panel.innerHTML =
+      '<div class="sp-suggest-label">试试这些搜索</div>' +
+      '<div class="sp-suggest-row">' + QUICK_SEARCHES.map(q =>
+        '<button class="sp-suggest-pill" onclick="fillSearch(\'' + q + '\')">🔍 ' + q + '</button>'
+      ).join('') + '</div>' +
+      '<div class="sp-quiz-bar">' +
+        '<span>不知道从哪开始？3步测验为你推荐专属学习内容</span>' +
+        '<button class="sp-quiz-btn" onclick="closeSearchPanel(); openQuizMatch();">🎯 测一测</button>' +
+      '</div>';
+  } else {
+    panel.className = 'search-panel open sp-active';
+    panel.innerHTML =
+      '<div class="sp-result-count">找到 ' + SEARCH_RESULTS.length + ' 条相关学习资源</div>' +
+      '<div class="sp-result-list">' + SEARCH_RESULTS.map((r, i) =>
+        '<div class="sp-result-item" onclick="openResultDetail(\'' + r.title + '\')">' +
+          '<div class="sp-result-head">' +
+            '<span class="sp-result-tag" style="border-color:' + r.tagColor + ';color:' + r.tagColor + ';">' + r.tag + '</span>' +
+            '<span class="sp-result-title">' + r.title + '</span>' +
+            '<button class="sp-result-plan-btn' + (addedPlans.has(i) ? ' added' : '') + '" onclick="event.stopPropagation(); toggleAddPlan(' + i + ', this)">' +
+              (addedPlans.has(i) ? '已加入 ✓' : '加入学习计划') +
+            '</button>' +
+          '</div>' +
+          '<div class="sp-result-desc">' + r.desc + '</div>' +
+          '<div class="sp-result-meta">' +
+            '<span class="sp-rating">⭐ ' + r.rating + '</span>' +
+            '<span><img src="assets/icons/icon-level.svg" alt="">' + r.level + '</span>' +
+            '<span><img src="assets/icons/icon-time.svg" alt="">' + r.time + '</span>' +
+            '<span><img src="assets/icons/icon-people.svg" alt="">' + r.count + '</span>' +
+          '</div>' +
+        '</div>'
+      ).join('') + '</div>' +
+      '<a class="sp-view-all" href="#">查看全部结果 →</a>';
+  }
+}
+
+function fillSearch(q){
+  const input = document.getElementById('searchInput');
+  input.value = q;
+  renderSearchPanel(q);
+}
+function toggleAddPlan(i, btn){
+  if (addedPlans.has(i)) { addedPlans.delete(i); btn.textContent = '加入学习计划'; btn.classList.remove('added'); }
+  else { addedPlans.add(i); btn.textContent = '已加入 ✓'; btn.classList.add('added'); }
+}
+function openResultDetail(title){
+  window.location.href = 'detail.html?title=' + encodeURIComponent(title);
+}
+function closeSearchPanel(){
+  document.getElementById('searchPanel').classList.remove('open');
+}
+document.addEventListener('click', e => {
+  const panel = document.getElementById('searchPanel');
+  const bar = document.querySelector('.search-bar');
+  if (panel.classList.contains('open') && !panel.contains(e.target) && !bar.contains(e.target)) {
+    closeSearchPanel();
+  }
+});
 </script>
 </body>
 </html>

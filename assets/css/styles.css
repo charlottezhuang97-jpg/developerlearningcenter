@@ -141,12 +141,121 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   transform: rotate(45deg);
   transform-origin: right center;
 }
-.search-placeholder {
+.search-input {
   position: absolute;
+  left: 51px; top: 0;
+  width: calc(100% - 71px);
+  height: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-sans);
   font-size: 14px;
-  line-height: 16.8px;
-  color: var(--color-text-muted);
+  color: var(--color-text-primary);
 }
+.search-input::placeholder { color: var(--color-text-muted); }
+
+/* ================= Search panel (default/初始/激活/悬浮) =================
+   内容/颜色/间距来自 Figma 节点 164:2712(初始面板) / 165:4366(激活/悬浮，
+   两者结构相同，悬浮态只多一个「加入学习计划」按钮)。 */
+.search-panel {
+  display: none;
+  position: absolute;
+  background: var(--color-bg-surface);
+  border: 1px solid #EAECEF;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 20;
+  overflow: hidden;
+}
+.search-panel.open { display: block; }
+
+/* 初始面板：空焦点态 */
+.sp-initial { width: 1090px; }
+.sp-suggest-label { padding: 16px 16px 0; font-size: 12px; line-height: 18px; color: #9BA1AB; }
+.sp-suggest-row { display: flex; flex-wrap: wrap; gap: 12px 9px; padding: 12px 16px 16px; }
+.sp-suggest-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #F7F8FA;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: #5A6069;
+  transition: background 0.15s;
+}
+.sp-suggest-pill:hover { background: #EAECEF; }
+.sp-quiz-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  background: #F7F8FA;
+  padding: 12px 16px;
+  font-size: 12px;
+  color: #9BA1AB;
+}
+.sp-quiz-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid #16181D;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #16181D;
+  background: transparent;
+  transition: background 0.15s;
+}
+.sp-quiz-btn:hover { background: var(--color-bg-subtle); }
+
+/* 激活/悬浮面板：搜索结果列表 */
+.sp-active { width: 1080px; }
+.sp-result-count { padding: 13px 16px 12px; font-size: 12px; font-weight: 600; color: #9BA1AB; border-bottom: 1px solid #F2F3F5; }
+.sp-result-list { max-height: 480px; overflow-y: auto; }
+.sp-result-item {
+  display: block;
+  position: relative;
+  padding: 12px 16px;
+  border-bottom: 1px solid #F2F3F5;
+  transition: background 0.15s;
+}
+.sp-result-item:last-child { border-bottom: none; }
+.sp-result-item:hover { background: var(--color-bg-subtle); }
+.sp-result-head { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+.sp-result-tag {
+  flex: none;
+  border: 1px solid;
+  border-radius: 16px;
+  padding: 5px 12px 6px;
+  font-size: 12px;
+  line-height: 18px;
+}
+.sp-result-title { font-size: 14px; font-weight: 600; line-height: 19.25px; color: #16181D; }
+.sp-result-plan-btn {
+  display: none;
+  margin-left: auto;
+  flex: none;
+  border: 1px solid #16181D;
+  border-radius: 16px;
+  padding: 5px 12px 6px;
+  font-size: 12px;
+  color: #16181D;
+  background: var(--color-bg-surface);
+  transition: background 0.15s;
+}
+.sp-result-item:hover .sp-result-plan-btn { display: inline-block; }
+.sp-result-plan-btn:hover { background: var(--color-bg-subtle); }
+.sp-result-plan-btn.added { border-color: var(--color-brand-red-dark); color: var(--color-brand-red-dark); }
+.sp-result-desc { font-size: 12px; line-height: 19.5px; color: #5A6069; margin-bottom: 6px; }
+.sp-result-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: #9BA1AB; }
+.sp-result-meta .sp-rating { display: flex; align-items: center; gap: 4px; color: var(--color-brand-red-dark); }
+.sp-result-meta span { display: flex; align-items: center; gap: 4px; }
+.sp-result-meta img { width: 12px; height: 12px; }
+.sp-view-all {
+  display: block;
+  background: #F7F8FA;
+  border-top: 1px solid #EAECEF;
+  padding: 13px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2E53FA;
+}
+.sp-view-all:hover { text-decoration: underline; }
 .subnav { position: absolute; background: transparent; }
 .subnav-item { position: absolute; font-size: 16px; line-height: 19.2px; white-space: nowrap; }
 .float-btn {
