@@ -230,6 +230,13 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   border-radius: var(--radius-lg);
 }
 .stat-icon { position: absolute; }
+.course-card-link {
+  position: absolute;
+  display: block;
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.15s;
+}
+.course-card-link:hover { box-shadow: var(--shadow-lg); }
 
 /* ================= Footer visual ================= */
 .footer-visual { position: static; }
