@@ -53,7 +53,7 @@
 <div class="intro-card" style="left:238.0px;top:529.0px;width:1488.0px;height:238.0px;"></div>
 <div class="txt" style="left:344.0px;top:561.0px;width:1275.0px;height:60.0px;font-size:22.0px;line-height:30.0px;font-weight:600;color:var(--color-text-primary);text-align:center;">浏览完整学习资源库，轻松开启你的昇腾学习之旅。深入掌握CANN等前沿领域使用的开发能力，收获一手实战经验与专家级知识，为昇腾开发打下坚实基础</div>
 <div class="txt" style="left:344.0px;top:715.0px;width:1275.0px;height:16.0px;font-size:14.0px;line-height:16.0px;font-weight:600;color:var(--color-text-secondary);text-align:center;white-space:nowrap;">不知道从哪开始？3步测验为你推荐专属学习内容</div>
-<button class="btn btn-outline" style="left:934.0px;top:662.0px;width:96.0px;height:40.0px;">测一测</button>
+<button class="btn btn-outline" style="left:934.0px;top:662.0px;width:96.0px;height:40.0px;" onclick="openQuizMatch()">测一测</button>
 </section>
 <section class="learn-type">
 <div class="txt" style="left:820.0px;top:839.0px;width:280.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">按学习类型选择</div>
@@ -148,5 +148,103 @@
 <div class="footer-accent" style="left:1813.0px;top:2238.0px;width:87.0px;height:183.0px;"></div>
 </section>
 </div>
+
+<div class="qm-overlay" id="quizMatchOverlay">
+  <div class="qm-card">
+    <div class="qm-head">
+      <span class="qm-icon">🎯</span>
+      <div class="qm-head-text">
+        <div class="qm-title" id="qmTitle"></div>
+        <div class="qm-subtitle" id="qmSubtitle"></div>
+      </div>
+      <button class="qm-close" onclick="closeQuizMatch()" aria-label="关闭">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="qm-progress-track"><div class="qm-progress-fill" id="qmProgressFill"></div></div>
+    <div class="qm-body" id="qmBody"></div>
+  </div>
+</div>
+
+<script>
+/* 数据来源：Figma 节点 165:8336 / 165:8654 / 165:8968 / 165:9280（测一测第一/二/三/四步） */
+const QUIZ_STEPS = [
+  { label: '第 1 步 / 共 3 步', headerTitle: '简单三步，祝你快速开启昇腾学习之旅', question: '你是什么角色？',
+    options: ['AI 初学者', '高校学生', '算法工程师', '应用开发者', '推理部署', '算子开发', '随便看看'] },
+  { label: '第 2 步 / 共 3 步', headerTitle: '很好，那么', question: '你的目标是？',
+    options: ['昇腾通用知识', '训练开发', '算子开发', '推理开发', '获取人才认证', '以上都有'] },
+  { label: '第 3 步 / 共 3 步', headerTitle: '好的～', question: '你当前的水平是？',
+    options: ['零基础', '熟悉 Python', '熟悉 Triton', '熟悉 C++', '熟悉 CUDA C / Ascend C'] },
+];
+
+let qmStep = 0;          // 0,1,2 = 三道题；'loading'；'result'
+let qmAnswers = [];
+
+function openQuizMatch(){
+  qmStep = 0;
+  qmAnswers = [];
+  document.getElementById('quizMatchOverlay').classList.add('open');
+  renderQuizStep();
+}
+function closeQuizMatch(){
+  document.getElementById('quizMatchOverlay').classList.remove('open');
+}
+
+function setQmProgress(pct){
+  document.getElementById('qmProgressFill').style.width = pct + '%';
+}
+
+function renderQuizStep(){
+  const body = document.getElementById('qmBody');
+  const titleEl = document.getElementById('qmTitle');
+  const subEl = document.getElementById('qmSubtitle');
+
+  if (typeof qmStep === 'number') {
+    const s = QUIZ_STEPS[qmStep];
+    titleEl.textContent = s.headerTitle;
+    subEl.style.display = 'none';
+    setQmProgress(qmStep / QUIZ_STEPS.length * 100);
+    body.innerHTML =
+      '<div class="qm-step-label">' + s.label + '</div>' +
+      '<div class="qm-question">' + s.question + '</div>' +
+      '<div class="qm-options">' + s.options.map((o, i) =>
+        '<button class="qm-option" onclick="pickQuizOption(' + i + ')">' + o + '</button>'
+      ).join('') + '</div>';
+  } else if (qmStep === 'loading') {
+    titleEl.textContent = '稍等片刻';
+    subEl.style.display = 'none';
+    body.innerHTML =
+      '<div class="qm-loading">' +
+        '<div class="qm-spinner"></div>' +
+        '<div class="qm-loading-text">正在为你匹配学习路径…</div>' +
+      '</div>';
+  } else if (qmStep === 'result') {
+    titleEl.textContent = '学习路径匹配';
+    subEl.textContent = '回答 3 道题，为你推荐最合适的资源';
+    subEl.style.display = 'block';
+    setQmProgress(100);
+    body.innerHTML =
+      '<div class="qm-result">' +
+        '<div class="qm-result-emoji">🎉</div>' +
+        '<div class="qm-result-heading">已为你匹配最合适的学习路径</div>' +
+        '<div class="qm-tags">' + qmAnswers.map(a => '<span class="qm-tag">' + a + '</span>').join('') + '</div>' +
+        '<button class="qm-cta" onclick="closeQuizMatch()">查看专属推荐</button>' +
+      '</div>';
+  }
+}
+
+function pickQuizOption(i){
+  const s = QUIZ_STEPS[qmStep];
+  qmAnswers.push(s.options[i]);
+  if (qmStep < QUIZ_STEPS.length - 1) {
+    qmStep++;
+    renderQuizStep();
+  } else {
+    qmStep = 'loading';
+    renderQuizStep();
+    setTimeout(() => { qmStep = 'result'; renderQuizStep(); }, 1200);
+  }
+}
+</script>
 </body>
 </html>

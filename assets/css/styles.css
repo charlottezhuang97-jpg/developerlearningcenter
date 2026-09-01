@@ -241,3 +241,140 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 /* ================= Footer visual ================= */
 .footer-visual { position: static; }
 .footer-accent { position: absolute; background: var(--color-text-dark-alt); }
+
+/* ================= Quiz match modal =================
+   内容/文案/颜色/间距均来自 Figma 节点 165:8336(第一步)/165:8654(第二步)/
+   165:8968(第三步)/165:9280(第四步·结果)，取值为该弹窗独立的一套灰阶
+   （与主页 token 非常接近但并非同一份，按来源如实取值，不强行合并）。 */
+:root {
+  --qm-ink: #16181D;
+  --qm-ink-3: #9BA1AB;
+  --qm-line: #EAECEF;
+  --qm-line-2: #F2F3F5;
+  --qm-progress-fill: #E4DBFC;
+}
+.qm-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.5);
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 15vh;
+  z-index: 100;
+}
+.qm-overlay.open { display: flex; }
+.qm-card {
+  background: var(--color-bg-surface);
+  width: 560px;
+  max-width: 90vw;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  animation: qm-card-in 0.2s ease;
+}
+@keyframes qm-card-in {
+  from { opacity: 0; transform: translateY(-8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.qm-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--qm-line);
+}
+.qm-icon { font-size: 20px; line-height: 30px; }
+.qm-head-text { flex: 1; min-width: 0; }
+.qm-title { font-size: 16px; line-height: 24px; font-weight: 600; color: var(--qm-ink); }
+.qm-subtitle { display: none; font-size: 12px; line-height: 18px; color: var(--qm-ink-3); margin-top: 2px; }
+.qm-close {
+  width: 28px; height: 28px; flex: none;
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--qm-ink-3);
+  transition: background 0.15s;
+}
+.qm-close:hover { background: var(--color-bg-subtle); }
+
+.qm-progress-track { height: 3px; background: var(--qm-line-2); }
+.qm-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--qm-progress-fill);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.qm-body { padding: 24px; min-height: 254px; animation: qm-body-in 0.2s ease; }
+@keyframes qm-body-in {
+  from { opacity: 0; transform: translateX(8px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.qm-step-label { font-size: 12px; line-height: 18px; color: var(--qm-ink-3); }
+.qm-question { font-size: 17px; line-height: 23.375px; font-weight: 600; color: var(--qm-ink); margin-top: 4px; margin-bottom: 20px; }
+
+.qm-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 9px;
+}
+.qm-option {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--qm-line);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--qm-ink);
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+.qm-option:hover { border-color: var(--color-text-primary); background: var(--color-bg-subtle); }
+
+/* 加载态：Figma 原型没有这一步，按基础 loading 补充 */
+.qm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-height: 206px;
+}
+.qm-spinner {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--qm-line);
+  border-top-color: var(--qm-ink);
+  animation: qm-spin 0.8s linear infinite;
+}
+@keyframes qm-spin { to { transform: rotate(360deg); } }
+.qm-loading-text { font-size: 14px; color: var(--qm-ink-3); }
+
+.qm-result { text-align: center; }
+.qm-result-emoji { font-size: 32px; line-height: 48px; }
+.qm-result-heading { font-size: 15px; line-height: 22.5px; font-weight: 600; color: var(--qm-ink); margin-top: 8px; margin-bottom: 12px; }
+.qm-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 20px; }
+.qm-tag {
+  background: var(--qm-line);
+  color: #000000;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+}
+.qm-cta {
+  width: 100%;
+  height: 45px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid var(--color-text-primary);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+.qm-cta:hover { background: var(--color-bg-subtle); }
