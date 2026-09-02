@@ -303,6 +303,77 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   border-radius: var(--radius-lg);
 }
 
+/* ================= 专属推荐楼层 =================
+   内容来自 Figma 节点 136:1414（主页-专属推荐）。卡片高度从 Figma 的 322px
+   压缩到 300px，是为了不把下方"按学习类型选择"楼层往下顶（两个楼层之间
+   原本就有 72px 间隙，压缩后刚好放得下，不用连锁改动后面所有楼层的坐标）。 */
+.rec-floor { position: static; }
+.rec-card-bg {
+  position: absolute;
+  background: #FFFFFF;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  overflow: hidden;
+}
+.rec-card-bg::before {
+  content: '';
+  position: absolute;
+  top: -80px; right: -60px;
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(84,120,251,0.14), rgba(152,74,246,0.10) 60%, transparent 72%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.rec-toolbar { position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.rec-chips { display: flex; gap: 12px; flex-wrap: wrap; }
+.rec-chip {
+  background: var(--color-bg-surface);
+  border: 1px solid #DFDFDF;
+  border-radius: var(--radius-sm);
+  padding: 7px 14px;
+  font-size: 12px;
+  color: var(--color-text-primary);
+}
+.rec-toolbar-right { display: flex; align-items: center; gap: 20px; flex: none; }
+.rec-edit-link { font-size: 14px; color: var(--color-text-secondary); cursor: pointer; }
+.rec-edit-link:hover { color: var(--color-text-primary); }
+.rec-refresh-btn { font-size: 14px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 4px; }
+.rec-refresh-btn:hover { color: var(--color-text-primary); }
+
+.rec-cards { position: relative; display: flex; gap: 15px; }
+.rec-card {
+  flex: 1;
+  min-width: 0;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+}
+.rec-card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.rec-card-tag {
+  flex: none;
+  border-radius: var(--radius-lg);
+  padding: 5px 11px 6px;
+  font-size: 12px;
+  border: 1px solid;
+}
+.rec-card-match {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  padding-left: 12px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rec-card h4 { font-size: 18px; font-weight: 600; color: var(--color-text-primary); margin-bottom: 12px; }
+.rec-card p { font-size: 14px; line-height: 1.4; color: var(--color-text-secondary); margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.rec-card-meta { display: flex; align-items: center; gap: 12px; font-size: 12px; color: var(--color-text-secondary); }
+.rec-card-meta .rating { color: var(--color-brand-red); }
+.rec-card-meta span { display: inline-flex; align-items: center; gap: 4px; }
+.rec-card-meta img { width: 12px; height: 12px; }
+
 /* ================= Learn type (4-card row) ================= */
 .learn-type { position: static; }
 .learn-type-card-bg {
@@ -329,7 +400,10 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   background:
     linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
     linear-gradient(135deg, rgba(84, 120, 251, 0.9), rgba(152, 74, 246, 0.9));
+  transition: left 0.25s ease;
 }
+#scenarioIcon { transition: left 0.25s ease; }
+.scenario-tab-hit { position: absolute; cursor: pointer; }
 
 /* ================= Course grid (2x2) ================= */
 .course-grid { position: static; }

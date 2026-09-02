@@ -324,12 +324,13 @@ function renderQuizStep(){
     subEl.textContent = '回答 3 道题，为你推荐最合适的资源';
     subEl.style.display = 'block';
     setQmProgress(100);
+    sessionStorage.setItem('qmAnswers', JSON.stringify(qmAnswers));
     body.innerHTML =
       '<div class="qm-result">' +
         '<div class="qm-result-emoji">🎉</div>' +
         '<div class="qm-result-heading">已为你匹配最合适的学习路径</div>' +
         '<div class="qm-tags">' + qmAnswers.map(a => '<span class="qm-tag">' + a + '</span>').join('') + '</div>' +
-        '<button class="qm-cta" onclick="closeQuizMatch()">查看专属推荐</button>' +
+        '<button class="qm-cta" onclick="window.location.href=\'index.html?rec=1\'">查看专属推荐</button>' +
       '</div>';
   }
 }

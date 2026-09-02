@@ -49,12 +49,27 @@
 <button class="float-btn" style="left:1840.0px;top:1123.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
 <button class="float-btn" style="left:1840.0px;top:1167.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
 </section>
-<section class="intro">
+<section class="intro" id="floorDefault">
 <div class="txt" style="left:704.5px;top:439.0px;width:555.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">什么是开发者学习中心（DLC）</div>
 <div class="intro-card" style="left:238.0px;top:529.0px;width:1488.0px;height:238.0px;"></div>
 <div class="txt" style="left:344.0px;top:561.0px;width:1275.0px;height:60.0px;font-size:22.0px;line-height:30.0px;font-weight:600;color:var(--color-text-primary);text-align:center;">浏览完整学习资源库，轻松开启你的昇腾学习之旅。深入掌握CANN等前沿领域使用的开发能力，收获一手实战经验与专家级知识，为昇腾开发打下坚实基础</div>
 <div class="txt" style="left:344.0px;top:715.0px;width:1275.0px;height:16.0px;font-size:14.0px;line-height:16.0px;font-weight:600;color:var(--color-text-secondary);text-align:center;white-space:nowrap;">不知道从哪开始？3步测验为你推荐专属学习内容</div>
 <button class="btn btn-outline" style="left:934.0px;top:662.0px;width:96.0px;height:40.0px;" onclick="openQuizMatch()">测一测</button>
+</section>
+
+<!-- 专属推荐楼层：完成"测一测"后替换上面的默认楼层。内容来自 Figma 节点 136:1414（主页-专属推荐） -->
+<section class="rec-floor" id="floorRecommend" style="display:none;">
+<div class="txt" style="left:238.0px;top:439.0px;width:1896.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:left;white-space:nowrap;">专属推荐</div>
+<div class="rec-card-bg" style="left:238.0px;top:529.0px;width:1488.0px;height:300.0px;">
+  <div class="rec-toolbar">
+    <div class="rec-chips" id="recChips"></div>
+    <div class="rec-toolbar-right">
+      <span class="rec-edit-link" onclick="openQuizMatch()">修改</span>
+      <button class="rec-refresh-btn" onclick="shuffleRecCards()">↻ 换一批</button>
+    </div>
+  </div>
+  <div class="rec-cards" id="recCards"></div>
+</div>
 </section>
 <section class="learn-type">
 <div class="txt" style="left:820.0px;top:839.0px;width:280.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">按学习类型选择</div>
@@ -84,14 +99,17 @@
 <section class="scenario-strip">
 <div class="scenario-strip-top" style="left:216.0px;top:1453.0px;width:1488.0px;height:106.0px;"></div>
 <div class="scenario-strip-bottom" style="left:216.0px;top:1571.0px;width:1488.0px;height:446.0px;"></div>
-<div class="scenario-tag-bg" style="left:224.0px;top:1461.0px;width:486.0px;height:90.0px;"></div>
-<img class="ph-img" src="assets/images/glass-icon.png" alt="" style="left:579.0px;top:1436.0px;width:141.0px;height:141.0px;">
+<div class="scenario-tag-bg" id="scenarioTagBg" style="left:224.0px;top:1461.0px;width:486.0px;height:90.0px;"></div>
+<img class="ph-img" id="scenarioIcon" src="assets/images/glass-icon.png" alt="" style="left:579.0px;top:1436.0px;width:141.0px;height:141.0px;">
 <div class="txt" style="left:248.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">CANN</div>
 <div class="txt" style="left:248.0px;top:1509.0px;width:255.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">华为针对AI场景推出的异构计算架构</div>
 <div class="txt" style="left:741.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">生成式AI与模型</div>
 <div class="txt" style="left:741.0px;top:1509.0px;width:290.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">根据已经学习的内容生成新的内容</div>
 <div class="txt" style="left:1232.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">AI应用与智能体</div>
 <div class="txt" style="left:1232.0px;top:1509.0px;width:255.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">自主感知环境，进行独立思考</div>
+<div class="scenario-tab-hit" onclick="selectScenario(0)" style="left:224.0px;top:1461.0px;width:493.0px;height:90.0px;"></div>
+<div class="scenario-tab-hit" onclick="selectScenario(1)" style="left:717.0px;top:1461.0px;width:493.0px;height:90.0px;"></div>
+<div class="scenario-tab-hit" onclick="selectScenario(2)" style="left:1208.0px;top:1461.0px;width:496.0px;height:90.0px;"></div>
 <div class="txt" style="left:248.0px;top:1963.0px;width:290.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">若想访问更多路径，可点击查看所有</div>
 </section>
 <section class="course-grid">
@@ -224,12 +242,13 @@ function renderQuizStep(){
     subEl.textContent = '回答 3 道题，为你推荐最合适的资源';
     subEl.style.display = 'block';
     setQmProgress(100);
+    sessionStorage.setItem('qmAnswers', JSON.stringify(qmAnswers));
     body.innerHTML =
       '<div class="qm-result">' +
         '<div class="qm-result-emoji">🎉</div>' +
         '<div class="qm-result-heading">已为你匹配最合适的学习路径</div>' +
         '<div class="qm-tags">' + qmAnswers.map(a => '<span class="qm-tag">' + a + '</span>').join('') + '</div>' +
-        '<button class="qm-cta" onclick="closeQuizMatch()">查看专属推荐</button>' +
+        '<button class="qm-cta" onclick="goToRecommendation()">查看专属推荐</button>' +
       '</div>';
   }
 }
@@ -332,6 +351,90 @@ document.addEventListener('click', e => {
     closeSearchPanel();
   }
 });
+
+/* ================= 专属推荐楼层 =================
+   来源：Figma 节点 136:1414。同一批课程复用主页课程网格已核实过的真实数据，
+   没有编造新课程；"换一批"从这个池子里随机挑 3 个，不是接真实推荐后端。 */
+const REC_POOL = [
+  { tag: '自主学习课程', tagColor: '#2E53FA', match: 'AscendC 算子开发', title: 'AscendC 算子开发', desc: '介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态', rating: '4.0', level: '中级', time: '2.5h', count: '1406' },
+  { tag: '自主学习课程', tagColor: '#2E53FA', match: 'CATLASS算子开发', title: 'CATLASS算子开发', desc: '介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态', rating: '4.0', level: '中级', time: '2.5h', count: '1406' },
+  { tag: '学习路径', tagColor: '#912EFA', match: 'AscendC 算子开发', title: '算子开发调试调优', desc: '介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态', rating: '4.0', level: '中级', time: '2.5h', count: '1406' },
+  { tag: '自主学习课程', tagColor: '#2E53FA', match: '昇腾AI芯片架构', title: '昇腾AI芯片架构', desc: '介绍昇腾AI芯片架构设计原理及性能特点，适合硬件工程师与系统开发者深入理解硬件加速。', rating: '3.8', level: '初级', time: '2h', count: '1305' },
+  { tag: '自主学习课程', tagColor: '#2E53FA', match: 'MindSpore 模型优化', title: 'MindSpore 模型优化', desc: '详解MindSpore框架下模型训练与优化技巧，涵盖自动微分、混合精度训练及分布式计算应用。', rating: '4.1', level: '高级', time: '3h', count: '1720' },
+];
+let recShown = [0, 1, 2];
+
+function recCardHTML(idx){
+  const r = REC_POOL[idx];
+  return '<div class="rec-card">' +
+    '<div class="rec-card-top">' +
+      '<span class="rec-card-tag" style="border-color:' + r.tagColor + ';color:' + r.tagColor + ';">' + r.tag + '</span>' +
+      '<span class="rec-card-match">' + r.match + '</span>' +
+    '</div>' +
+    '<h4>' + r.title + '</h4>' +
+    '<p>' + r.desc + '</p>' +
+    '<div class="rec-card-meta">' +
+      '<span class="rating">⭐ ' + r.rating + '</span>' +
+      '<span><img src="assets/icons/icon-level.svg" alt="">' + r.level + '</span>' +
+      '<span><img src="assets/icons/icon-time.svg" alt="">' + r.time + '</span>' +
+      '<span><img src="assets/icons/icon-people.svg" alt="">' + r.count + '</span>' +
+    '</div>' +
+  '</div>';
+}
+function renderRecCards(){
+  document.getElementById('recCards').innerHTML = recShown.map(recCardHTML).join('');
+}
+function shuffleRecCards(){
+  const pool = REC_POOL.map((_, i) => i);
+  const next = [];
+  while (next.length < 3 && pool.length) {
+    const pick = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+    next.push(pick);
+  }
+  recShown = next;
+  renderRecCards();
+}
+function renderRecChips(){
+  let answers = [];
+  try { answers = JSON.parse(sessionStorage.getItem('qmAnswers') || '[]'); } catch (e) {}
+  if (!answers.length) answers = ['AI初学者', '学习昇腾通用知识', '熟悉Python']; // Figma 示例态的默认值
+  document.getElementById('recChips').innerHTML = answers.map(a => '<span class="rec-chip">' + a + '</span>').join('');
+}
+function showRecommendFloor(){
+  document.getElementById('floorDefault').style.display = 'none';
+  document.getElementById('floorRecommend').style.display = 'block';
+  renderRecChips();
+  recShown = [0, 1, 2];
+  renderRecCards();
+}
+function goToRecommendation(){
+  closeQuizMatch();
+  if (document.getElementById('floorRecommend')) {
+    showRecommendFloor();
+    document.getElementById('floorRecommend').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  } else {
+    window.location.href = 'index.html?rec=1';
+  }
+}
+(function initRecFloor(){
+  if (new URLSearchParams(location.search).get('rec') === '1') showRecommendFloor();
+})();
+
+/* ================= 按开发场景选择：3 个 Tab 互相切换 =================
+   来源：Figma 节点 120:205 / 124:603 / 124:858，三个页面分别是 CANN /
+   生成式AI与模型 / AI应用与智能体 被选中时的状态（白色玻璃底 + 玻璃图标
+   叠在被选中的分类上）。位置按各分类文字的 left 值统一推算，图标复用
+   同一张 glass-icon.png（Figma 原稿三态图标略有大小差异，这里简化为一致）。 */
+const SCENARIO_TABS = [
+  { left: 248 }, // CANN
+  { left: 741 }, // 生成式AI与模型
+  { left: 1232 }, // AI应用与智能体
+];
+function selectScenario(i){
+  const t = SCENARIO_TABS[i];
+  document.getElementById('scenarioTagBg').style.left = (t.left - 24) + 'px';
+  document.getElementById('scenarioIcon').style.left = (t.left + 331) + 'px';
+}
 </script>
 </body>
 </html>
