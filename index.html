@@ -59,8 +59,8 @@
 
 <!-- 专属推荐楼层：完成"测一测"后替换上面的默认楼层。内容来自 Figma 节点 136:1414（主页-专属推荐） -->
 <section class="rec-floor" id="floorRecommend" style="display:none;">
-<div class="txt" style="left:238.0px;top:439.0px;width:1896.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:left;white-space:nowrap;">专属推荐</div>
-<div class="rec-card-bg" style="left:238.0px;top:529.0px;width:1488.0px;height:300.0px;">
+<div class="txt" style="left:34.0px;top:439.0px;width:1896.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">专属推荐</div>
+<div class="rec-card-bg" style="left:238.0px;top:529.0px;width:1488.0px;height:322.0px;">
   <div class="rec-toolbar">
     <div class="rec-chips" id="recChips"></div>
     <div class="rec-toolbar-right">
@@ -71,6 +71,7 @@
   <div class="rec-cards" id="recCards"></div>
 </div>
 </section>
+<div id="belowFloor1" style="position:relative;top:0px;transition:top 0.3s ease;">
 <section class="learn-type">
 <div class="txt" style="left:820.0px;top:839.0px;width:280.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">按学习类型选择</div>
 <div class="txt" style="left:322.0px;top:901.0px;width:1275.0px;height:18.0px;font-size:16.0px;line-height:18.0px;font-weight:600;color:var(--color-text-secondary);text-align:center;white-space:nowrap;">选择一种类型，为你提供一个最合适的学习资源</div>
@@ -166,6 +167,7 @@
 <img class="ph-img" src="assets/images/footer-visual.png" alt="" style="left:9.0px;top:2122.0px;width:1922.0px;height:381.0px;">
 <div class="footer-accent" style="left:1813.0px;top:2238.0px;width:87.0px;height:183.0px;"></div>
 </section>
+</div>
 </div>
 
 <div class="qm-overlay" id="quizMatchOverlay">
@@ -400,9 +402,15 @@ function renderRecChips(){
   if (!answers.length) answers = ['AI初学者', '学习昇腾通用知识', '熟悉Python']; // Figma 示例态的默认值
   document.getElementById('recChips').innerHTML = answers.map(a => '<span class="rec-chip">' + a + '</span>').join('');
 }
+/* 专属推荐卡片(322px)比原来"什么是开发者学习中心"卡片(238px)高 84px；
+   为了让它跟下面"按学习类型选择"楼层之间仍然保留原有的 72px 间距，
+   把该楼层往下的所有内容（#belowFloor1）整体下移 84px，而不是压缩卡片。 */
+const FLOOR1_SHIFT = 84;
 function showRecommendFloor(){
   document.getElementById('floorDefault').style.display = 'none';
   document.getElementById('floorRecommend').style.display = 'block';
+  document.getElementById('belowFloor1').style.top = FLOOR1_SHIFT + 'px';
+  document.querySelector('.page').style.height = (2503 + FLOOR1_SHIFT) + 'px';
   renderRecChips();
   recShown = [0, 1, 2];
   renderRecCards();
