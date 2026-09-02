@@ -101,11 +101,11 @@
 <div class="scenario-strip-bottom" style="left:216.0px;top:1571.0px;width:1488.0px;height:446.0px;"></div>
 <div class="scenario-tag-bg" id="scenarioTagBg" style="left:224.0px;top:1461.0px;width:486.0px;height:90.0px;"></div>
 <img class="ph-img" id="scenarioIcon" src="assets/images/glass-icon.png" alt="" style="left:579.0px;top:1436.0px;width:141.0px;height:141.0px;">
-<div class="txt" style="left:248.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">CANN</div>
+<div class="txt" id="scenarioTitle0" style="left:248.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-brand-red-dark);text-align:left;white-space:nowrap;transition:color 0.2s;">CANN</div>
 <div class="txt" style="left:248.0px;top:1509.0px;width:255.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">华为针对AI场景推出的异构计算架构</div>
-<div class="txt" style="left:741.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">生成式AI与模型</div>
+<div class="txt" id="scenarioTitle1" style="left:741.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;transition:color 0.2s;">生成式AI与模型</div>
 <div class="txt" style="left:741.0px;top:1509.0px;width:290.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">根据已经学习的内容生成新的内容</div>
-<div class="txt" style="left:1232.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">AI应用与智能体</div>
+<div class="txt" id="scenarioTitle2" style="left:1232.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;transition:color 0.2s;">AI应用与智能体</div>
 <div class="txt" style="left:1232.0px;top:1509.0px;width:255.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">自主感知环境，进行独立思考</div>
 <div class="scenario-tab-hit" onclick="selectScenario(0)" style="left:224.0px;top:1461.0px;width:493.0px;height:90.0px;"></div>
 <div class="scenario-tab-hit" onclick="selectScenario(1)" style="left:717.0px;top:1461.0px;width:493.0px;height:90.0px;"></div>
@@ -434,6 +434,9 @@ function selectScenario(i){
   const t = SCENARIO_TABS[i];
   document.getElementById('scenarioTagBg').style.left = (t.left - 24) + 'px';
   document.getElementById('scenarioIcon').style.left = (t.left + 331) + 'px';
+  for (let j = 0; j < SCENARIO_TABS.length; j++) {
+    document.getElementById('scenarioTitle' + j).style.color = j === i ? 'var(--color-brand-red-dark)' : 'var(--color-text-primary)';
+  }
 }
 </script>
 </body>
