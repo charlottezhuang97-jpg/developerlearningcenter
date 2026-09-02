@@ -490,21 +490,39 @@
   .ws-term-line{color:var(--ink)}
   .ws-term-line .prompt{color:var(--mark-code);font-weight:700}
 
-  /* 右侧栏空白处的 IDE 实践迷你面板（复用全屏 IDE 里的 .cell 系列样式，
-     默认展开，用户可以关闭；关闭后右下角留一个小圆按钮可以重新打开） */
-  .ide-dock{position:fixed;top:121px;right:24px;bottom:24px;width:380px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-float);z-index:40;display:none;flex-direction:column;overflow:hidden}
-  .ide-dock.open{display:flex}
-  .ide-dock-head{flex:none;display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--bg-soft)}
-  .ide-dock-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink)}
-  .ide-dock-tools{margin-left:auto;display:flex;gap:4px}
-  .ide-dock-tools button{width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--ink-2)}
-  .ide-dock-tools button:hover{background:var(--line)}
-  .ide-dock-body{flex:1;overflow-y:auto;padding:16px}
-  .ide-dock-hint{font-size:12.5px;color:var(--ink-2);margin-bottom:14px;line-height:1.6}
+  /* IDE 实践面板是页面布局的一部分（不是浮层），打开时把视频/tab 往左推：
+     视频到左边距、到顶部都是 32px，到 IDE 面板的间距也是 32px。内部结构
+     （文件列表/编辑器/问题-输出-调试控制台-终端-端口）复用全屏 IDE
+     （.ide-files/.fl-file/.cell/.ide-workspace/.ws-*）同一套视觉与交互。 */
+  .layout.ide-dock-open{grid-template-columns:1fr auto;max-width:none;column-gap:var(--sp-6);padding-right:var(--sp-6)}
+  .layout.ide-dock-open .main{padding:var(--sp-6) 0 var(--sp-6) var(--sp-6)}
+  .layout.docked-toc.ide-dock-open{grid-template-columns:248px 1fr auto}
+  .ide-dock{display:none;width:560px;flex-direction:column;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-1);overflow:hidden;position:sticky;top:121px;height:calc(100vh - 153px);align-self:start}
+  .layout.ide-dock-open .ide-dock{display:flex}
+  .ide-dock-topbar{flex:none;height:48px;background:var(--bg-soft);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:4px;padding:0 10px}
+  .ide-dock-title{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:700;color:var(--ink);margin-right:8px;flex:none}
+  .ide-dock-runbar{display:flex;align-items:center;gap:2px}
+  .ide-dock-runbar button{display:flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-2);padding:6px 9px;border-radius:var(--r-sm);transition:background .15s}
+  .ide-dock-runbar button:hover{background:var(--line)}
+  .ide-dock-runbar button.run:hover{color:var(--mark-code)}
+  .ide-dock-topbar-tools{margin-left:auto;display:flex;gap:2px;flex:none}
+  .ide-dock-topbar-tools button{width:26px;height:26px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--ink-2)}
+  .ide-dock-topbar-tools button:hover{background:var(--line);color:var(--ink)}
+  .ide-dock-main{flex:1;display:grid;grid-template-columns:130px 1fr;min-height:0}
+  .ide-dock-files{background:var(--bg);border-right:1px solid var(--line);padding:12px 8px;overflow-y:auto}
+  .ide-dock-files .fl-label{font-size:11px;font-weight:700;color:var(--ink-2);margin-bottom:8px;padding-left:4px}
+  .ide-dock-files .fl-file{padding:7px 8px;font-size:12.5px;gap:6px}
+  .ide-dock-center{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .ide-dock-editor{flex:1;overflow-y:auto;min-height:0}
+  .ide-dock-editor .cell{margin:12px}
+  .ide-dock .ide-workspace{height:150px}
+  .ide-dock .ws-tabs{height:34px;padding:0 6px}
+  .ide-dock .ws-tab{padding:6px 9px;font-size:11.5px}
+  .ide-dock .ws-body{padding:10px 12px;font-size:12px}
   .ide-dock-reopen{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:none;place-items:center;box-shadow:var(--shadow-float);z-index:40;transition:transform .15s}
   .ide-dock-reopen:hover{transform:scale(1.06)}
   .ide-dock-reopen.show{display:grid}
-  @media (max-width:1400px){.ide-dock{display:none!important}.ide-dock-reopen{display:none!important}}
+  @media (max-width:1500px){.layout.ide-dock-open{grid-template-columns:1fr;max-width:1440px;padding-right:0}.layout.docked-toc.ide-dock-open{grid-template-columns:248px 1fr}.layout.ide-dock-open .main{padding:var(--sp-6)}.ide-dock,.ide-dock-reopen{display:none!important}}
 
   .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:80;box-shadow:var(--shadow-2)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -628,7 +646,7 @@
   <button class="kg-entry" onclick="openKnowledgeMap()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M8 7l7-.3M8 8l3 8.5M16 8l-3 8.5"/></svg>知识全景</button>
 </div>
 
-<div class="layout" id="layout">
+<div class="layout ide-dock-open" id="layout">
   <aside class="sidebar">
     <div class="sidebar-head">
       <h2>学习路径</h2>
@@ -802,7 +820,59 @@
     </div>
    </div>
   </main>
+
+  <!-- IDE 实践迷你面板：布局的一部分，不是浮层 -->
+  <aside class="ide-dock" id="ideDock">
+    <div class="ide-dock-topbar">
+      <span class="ide-dock-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>IDE 实践</span>
+      <div class="ide-dock-runbar">
+        <button class="run" onclick="dockRunAll()"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>运行</button>
+        <button onclick="toast('已中止')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>中止</button>
+        <button onclick="toast('已保存')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v15H5zM8 3v6h7"/></svg>保存</button>
+      </div>
+      <div class="ide-dock-topbar-tools">
+        <button onclick="openIDE()" title="全屏打开"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg></button>
+        <button onclick="closeIdeDock()" title="收起面板"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+    </div>
+    <div class="ide-dock-main">
+      <aside class="ide-dock-files">
+        <div class="fl-label">文件</div>
+        <div class="fl-file active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/></svg>check_env.py</div>
+        <div class="fl-file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/></svg>list_packages.py</div>
+        <div class="fl-file"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/></svg>README.md</div>
+      </aside>
+      <div class="ide-dock-center">
+        <div class="ide-dock-editor">
+          <div class="cell">
+            <div class="cell-bar"><span class="cell-idx">[1]</span><span class="cell-type code">CODE</span><div class="cell-ops"><button class="cell-op run" onclick="runCell(this,'dockOut1')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>运行</button></div></div>
+            <div class="cell-body"># 检查 CANN 环境
+import acl
+print(acl.rt.get_version())</div>
+            <div class="cell-out" id="dockOut1"><span class="ok">✓</span> (7, 0, 0)</div>
+          </div>
+        </div>
+        <div class="ide-workspace">
+          <div class="ws-tabs">
+            <button class="ws-tab active" onclick="switchWS('problems',this)">问题</button>
+            <button class="ws-tab" onclick="switchWS('output',this)">输出</button>
+            <button class="ws-tab" onclick="switchWS('debug',this)">调试控制台</button>
+            <button class="ws-tab" onclick="switchWS('terminal',this)">终端</button>
+            <button class="ws-tab" onclick="switchWS('ports',this)">端口</button>
+          </div>
+          <div class="ws-body">
+            <div class="ws-view active" data-id="problems"><span class="ws-empty">未在工作区检测到问题。</span></div>
+            <div class="ws-view" data-id="output"><span class="ws-empty">运行代码后，输出将显示在这里。</span></div>
+            <div class="ws-view" data-id="debug"><span class="ws-empty">调试控制台已就绪，等待断点。</span></div>
+            <div class="ws-view" data-id="terminal"><div class="ws-term-line"><span class="prompt">(CANN) root@npu-910b:~$</span> <span style="opacity:.6">▌</span></div></div>
+            <div class="ws-view" data-id="ports"><span class="ws-empty">当前没有转发的端口。</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
 </div>
+<button class="ide-dock-reopen" id="ideDockReopen" onclick="openIdeDock()" title="打开 IDE 实践"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg></button>
 
 <!-- 目录悬浮浮窗 -->
 <div class="toc-pop" id="tocPop">
@@ -901,11 +971,11 @@ print(result.stdout)</div>
           <button class="ws-tab" onclick="switchWS('ports',this)">端口</button>
         </div>
         <div class="ws-body">
-          <div class="ws-view active" id="ws-problems"><span class="ws-empty">未在工作区检测到问题。</span></div>
-          <div class="ws-view" id="ws-output"><span class="ws-empty">运行 Cell 后，输出将显示在这里。</span></div>
-          <div class="ws-view" id="ws-debug"><span class="ws-empty">调试控制台已就绪，等待断点。</span></div>
-          <div class="ws-view" id="ws-terminal"><div class="ws-term-line"><span class="prompt">(CANN) root@npu-910b:~$</span> source /usr/local/Ascend/ascend-toolkit/set_env.sh</div><div class="ws-term-line"><span class="prompt">(CANN) root@npu-910b:~$</span> <span style="opacity:.6">▌</span></div></div>
-          <div class="ws-view" id="ws-ports"><span class="ws-empty">当前没有转发的端口。</span></div>
+          <div class="ws-view active" data-id="problems"><span class="ws-empty">未在工作区检测到问题。</span></div>
+          <div class="ws-view" data-id="output"><span class="ws-empty">运行 Cell 后，输出将显示在这里。</span></div>
+          <div class="ws-view" data-id="debug"><span class="ws-empty">调试控制台已就绪，等待断点。</span></div>
+          <div class="ws-view" data-id="terminal"><div class="ws-term-line"><span class="prompt">(CANN) root@npu-910b:~$</span> source /usr/local/Ascend/ascend-toolkit/set_env.sh</div><div class="ws-term-line"><span class="prompt">(CANN) root@npu-910b:~$</span> <span style="opacity:.6">▌</span></div></div>
+          <div class="ws-view" data-id="ports"><span class="ws-empty">当前没有转发的端口。</span></div>
         </div>
       </div>
     </div>
@@ -1008,27 +1078,6 @@ print(result.stdout)</div>
     </div>
   </div>
 </div>
-
-<div class="ide-dock open" id="ideDock">
-  <div class="ide-dock-head">
-    <span class="ide-dock-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>IDE 实践</span>
-    <div class="ide-dock-tools">
-      <button onclick="openIDE()" title="全屏打开"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg></button>
-      <button onclick="closeIdeDock()" title="收起"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-    </div>
-  </div>
-  <div class="ide-dock-body">
-    <div class="ide-dock-hint">跟着视频动手验证一下当前环境，随时可以运行。</div>
-    <div class="cell">
-      <div class="cell-bar"><span class="cell-idx">[1]</span><span class="cell-type code">CODE</span><div class="cell-ops"><button class="cell-op run" onclick="runCell(this,'dockOut1')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>运行</button></div></div>
-      <div class="cell-body"># 检查 CANN 环境
-import acl
-print(acl.rt.get_version())</div>
-      <div class="cell-out" id="dockOut1"><span class="ok">✓</span> (7, 0, 0)</div>
-    </div>
-  </div>
-</div>
-<button class="ide-dock-reopen" id="ideDockReopen" onclick="openIdeDock()" title="打开 IDE 实践"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg></button>
 
 <div class="toast" id="toast"><span class="ic">✓</span><span id="toastMsg">已完成</span></div>
 
@@ -1231,10 +1280,11 @@ print(acl.rt.get_version())</div>
   /* ===== IDE 实战 ===== */
   function openIDE(){document.getElementById('ide').classList.add('open');document.body.style.overflow='hidden';}
   function closeIDE(){document.getElementById('ide').classList.remove('open');document.body.style.overflow='';}
-  function closeIdeDock(){document.getElementById('ideDock').classList.remove('open');document.getElementById('ideDockReopen').classList.add('show');}
-  function openIdeDock(){document.getElementById('ideDock').classList.add('open');document.getElementById('ideDockReopen').classList.remove('show');}
+  function closeIdeDock(){document.getElementById('layout').classList.remove('ide-dock-open');document.getElementById('ideDockReopen').classList.add('show');}
+  function openIdeDock(){document.getElementById('layout').classList.add('ide-dock-open');document.getElementById('ideDockReopen').classList.remove('show');}
+  function dockRunAll(){document.querySelectorAll('#ideDock .cell-op.run').forEach(btn=>btn.click());}
   function runCell(btn,outId){const out=document.getElementById(outId);out.classList.add('show');const idx=btn.closest('.cell').querySelector('.cell-idx');idx.textContent='[*]';setTimeout(()=>{idx.textContent=idx.textContent.replace('*',Math.floor(Math.random()*9+2));},400);}
-  function switchWS(id,el){document.querySelectorAll('.ws-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.ws-view').forEach(v=>v.classList.remove('active'));document.getElementById('ws-'+id).classList.add('active');}
+  function switchWS(id,el){const root=el.closest('.ide-workspace');root.querySelectorAll('.ws-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');root.querySelectorAll('.ws-view').forEach(v=>v.classList.remove('active'));root.querySelector('.ws-view[data-id="'+id+'"]').classList.add('active');}
 
   /* ===== 知识全景 =====
      数据来源 Figma 节点 181:16179（KnowledgeMap-默认）及同组 7 个状态画板。
