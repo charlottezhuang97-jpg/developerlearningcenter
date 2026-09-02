@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>查找学习资源 · Ascend Developer</title>
+<style>
+  :root{
+    /* 颜色对齐 /ascenddesign-system/tokens/design-tokens.json 的 color.* 令牌；
+       分类标签色（蓝/绿/橙）是本页（Figma 节点 157:4080）特有的语义色，
+       主页令牌没有对应场景，按约定保留为本页本地变量。 */
+    --brand:#C7000B;
+    --ink:#101828;
+    --ink-2:#5A6069;
+    --ink-3:#99A1AF;
+    --line:#E5E7EB;
+    --line-2:#F3F3F3;
+    --bg:#FFFFFF;
+    --bg-soft:#F5F6FA;
+    --tag-blue-bg:#EFF6FF; --tag-blue-fg:#2563EB;
+    --tag-green-bg:#F0FDF4; --tag-green-fg:#15803D;
+    --tag-orange-bg:#FFF7ED; --tag-orange-fg:#C2410C;
+    --accent-ai:#6E5BE0; --accent-ai-soft:#F0EDFC;
+    --font:'HarmonyOS Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px;
+    --shadow-1:0px 1px 3px rgba(0,0,0,.1);
+    --shadow-lg:0px 4px 6px rgba(0,0,0,.1);
+  }
+  @font-face{ font-family:'HarmonyOS Sans SC'; src:url('assets/fonts/HarmonyOS_Sans_SC_Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face{ font-family:'HarmonyOS Sans SC'; src:url('assets/fonts/HarmonyOS_Sans_SC_Medium.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face{ font-family:'HarmonyOS Sans SC'; src:url('assets/fonts/HarmonyOS_Sans_SC_Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg-soft);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  .topbar{height:64px;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:32px;padding:0 32px;position:sticky;top:0;z-index:40}
+  .logo img{height:28px;display:block}
+  .nav{display:flex;gap:24px;font-size:15px;color:var(--ink-2)}
+  .nav a{padding:4px 2px;position:relative}
+  .nav a:hover{color:var(--ink)}
+  .nav a.active{color:var(--brand);font-weight:600}
+
+  .find-hero{max-width:1128px;margin:0 auto;padding:40px 24px 24px;text-align:center}
+  .find-hero h1{font-size:40px;font-weight:600;color:var(--ink);margin-bottom:24px}
+  .find-search-box{
+    display:flex;align-items:center;gap:12px;
+    max-width:1080px;margin:0 auto;
+    background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);
+    padding:12px 16px;
+  }
+  .find-search-box svg{flex:none;color:var(--ink-3)}
+  .find-search-box input{flex:1;border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent}
+  .find-search-box input::placeholder{color:var(--ink-3)}
+  .find-quiz-hint{
+    margin-top:16px;display:inline-flex;align-items:center;gap:6px;
+    font-size:13px;color:#730CFF;cursor:pointer;
+  }
+  .find-quiz-hint:hover{text-decoration:underline}
+
+  .find-layout{max-width:1360px;margin:0 auto;padding:0 24px 64px;display:flex;gap:24px;align-items:flex-start}
+
+  .find-sidebar{
+    width:220px;flex:none;background:var(--bg);border:1px solid var(--line);
+    border-radius:var(--r-md);padding:21px;position:sticky;top:88px;
+  }
+  .find-sidebar h3{font-size:14px;font-weight:700;margin-bottom:20px}
+  .filter-group{margin-bottom:24px}
+  .filter-group:last-child{margin-bottom:0}
+  .filter-group .fg-label{font-size:12px;color:var(--ink);margin-bottom:12px}
+  .filter-option{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;font-size:13px;color:var(--ink-2)}
+  .filter-option input{display:none}
+  .filter-option .box{
+    width:16px;height:16px;flex:none;border-radius:4px;border:1px solid #D0D5DD;
+    display:flex;align-items:center;justify-content:center;background:var(--bg);
+  }
+  .filter-option input:checked ~ .box{background:#000;border-color:#000}
+  .filter-option input:checked ~ .box::after{content:'';width:8px;height:5px;border-left:1.5px solid #fff;border-bottom:1.5px solid #fff;transform:rotate(-45deg) translate(1px,-1px)}
+
+  .find-results{flex:1;min-width:0}
+  .find-result-count{font-size:14px;font-weight:600;color:var(--ink-3);margin-bottom:16px}
+  .find-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:20px}
+  .find-card{display:block;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:20px;transition:box-shadow .15s}
+  .find-card:hover{box-shadow:var(--shadow-lg)}
+  .find-card-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+  .find-tag{border-radius:999px;padding:2px 8px;font-size:11px;line-height:17px}
+  .find-tag.type{font-weight:600}
+  .find-tag.sub{background:var(--bg-soft);color:var(--ink-2)}
+  .find-card h4{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px}
+  .find-card p{font-size:12px;line-height:19.5px;color:var(--ink-2);margin-bottom:16px}
+  .find-card-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--ink-3)}
+  .find-card-meta .rating{display:flex;align-items:center;gap:4px;color:var(--brand)}
+  .find-card-meta span{display:flex;align-items:center;gap:4px}
+  .find-card-meta img{width:12px;height:12px}
+
+  .find-footer-img{display:block;width:100%;height:auto}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="logo" href="index.html"><img src="assets/images/logo.png" alt="Ascend Developer"></a>
+  <nav class="nav">
+    <a href="#">开发者</a><a href="index.html">主页</a><a href="#">开发</a><a href="#">文档</a>
+    <a href="#">活动</a><a href="#" class="active">学习</a><a href="#">论坛</a><a href="#">博客</a><a href="#">开发者计划</a>
+  </nav>
+</header>
+
+<div class="find-hero">
+  <h1>查找学习资源</h1>
+  <div class="find-search-box">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    <input type="text" id="findSearchInput" placeholder="今天想学什么？" onkeydown="if(event.key==='Enter') runFindSearch()">
+  </div>
+  <div class="find-quiz-hint" onclick="openQuizMatch()">
+    <span>结果没有合适的？3步测验为你推荐专属学习内容</span>
+    <span>🎯 测一测</span>
+  </div>
+</div>
+
+<div class="find-layout">
+  <aside class="find-sidebar">
+    <h3>筛选</h3>
+    <div class="filter-group">
+      <div class="fg-label">场景</div>
+      <label class="filter-option"><input type="checkbox" checked><span class="box"></span>CANN</label>
+      <label class="filter-option"><input type="checkbox"><span class="box"></span>生成式AI与大模型</label>
+      <label class="filter-option"><input type="checkbox"><span class="box"></span>AI应用与智能体</label>
+    </div>
+    <div class="filter-group">
+      <div class="fg-label">认证分类</div>
+      <label class="filter-option"><input type="checkbox" checked><span class="box"></span>算子开发</label>
+      <label class="filter-option"><input type="checkbox"><span class="box"></span>训练开发</label>
+      <label class="filter-option"><input type="checkbox"><span class="box"></span>推理开发</label>
+    </div>
+    <div class="filter-group">
+      <div class="fg-label">课程属性</div>
+      <label class="filter-option"><input type="checkbox"><span class="box"></span>自主学习课程</label>
+      <label class="filter-option"><input type="checkbox"><span class="box"></span>讲师指导培训</label>
+    </div>
+  </aside>
+
+  <main class="find-results">
+    <div class="find-result-count" id="findResultCount"></div>
+    <div class="find-grid" id="findGrid"></div>
+  </main>
+</div>
+
+<img class="find-footer-img" src="assets/images/footer-visual.png" alt="">
+
+<!-- 学习路径匹配弹窗（与 index.html 共用同一套内容/逻辑） -->
+<div class="qm-overlay" id="quizMatchOverlay">
+  <div class="qm-card">
+    <div class="qm-head">
+      <span class="qm-icon">🎯</span>
+      <div class="qm-head-text">
+        <div class="qm-title" id="qmTitle"></div>
+        <div class="qm-subtitle" id="qmSubtitle"></div>
+      </div>
+      <button class="qm-close" onclick="closeQuizMatch()" aria-label="关闭">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <div class="qm-progress-track"><div class="qm-progress-fill" id="qmProgressFill"></div></div>
+    <div class="qm-body" id="qmBody"></div>
+  </div>
+</div>
+
+<style>
+  :root{ --qm-ink:#16181D; --qm-ink-3:#9BA1AB; --qm-line:#EAECEF; --qm-line-2:#F2F3F5; --qm-progress-fill:#E4DBFC; }
+  .qm-overlay{display:none;position:fixed;inset:0;background:rgba(16,24,40,.5);align-items:flex-start;justify-content:center;padding-top:15vh;z-index:100}
+  .qm-overlay.open{display:flex}
+  .qm-card{background:#fff;width:560px;max-width:90vw;border-radius:var(--r-lg);box-shadow:var(--shadow-lg);overflow:hidden;animation:qm-card-in .2s ease}
+  @keyframes qm-card-in{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .qm-head{display:flex;align-items:flex-start;gap:12px;padding:20px 24px;border-bottom:1px solid var(--qm-line)}
+  .qm-icon{font-size:20px;line-height:30px}
+  .qm-head-text{flex:1;min-width:0}
+  .qm-title{font-size:16px;line-height:24px;font-weight:600;color:var(--qm-ink)}
+  .qm-subtitle{display:none;font-size:12px;line-height:18px;color:var(--qm-ink-3);margin-top:2px}
+  .qm-close{width:28px;height:28px;flex:none;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;color:var(--qm-ink-3);transition:background .15s}
+  .qm-close:hover{background:var(--bg-soft)}
+  .qm-progress-track{height:3px;background:var(--qm-line-2)}
+  .qm-progress-fill{height:100%;width:0%;background:var(--qm-progress-fill);border-radius:999px;transition:width .3s ease}
+  .qm-body{padding:24px;min-height:254px;animation:qm-body-in .2s ease}
+  @keyframes qm-body-in{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+  .qm-step-label{font-size:12px;line-height:18px;color:var(--qm-ink-3)}
+  .qm-question{font-size:17px;line-height:23.375px;font-weight:600;color:var(--qm-ink);margin-top:4px;margin-bottom:20px}
+  .qm-options{display:grid;grid-template-columns:1fr 1fr;gap:12px 9px}
+  .qm-option{background:#fff;border:1px solid var(--qm-line);border-radius:var(--r-md);padding:14px 16px;font-size:14px;line-height:21px;color:var(--qm-ink);text-align:left;transition:border-color .15s,background .15s}
+  .qm-option:hover{border-color:#000;background:var(--bg-soft)}
+  .qm-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:206px}
+  .qm-spinner{width:32px;height:32px;border-radius:50%;border:3px solid var(--qm-line);border-top-color:var(--qm-ink);animation:qm-spin .8s linear infinite}
+  @keyframes qm-spin{to{transform:rotate(360deg)}}
+  .qm-loading-text{font-size:14px;color:var(--qm-ink-3)}
+  .qm-result{text-align:center}
+  .qm-result-emoji{font-size:32px;line-height:48px}
+  .qm-result-heading{font-size:15px;line-height:22.5px;font-weight:600;color:var(--qm-ink);margin-top:8px;margin-bottom:12px}
+  .qm-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:20px}
+  .qm-tag{background:var(--qm-line);color:#000;border-radius:999px;padding:4px 12px;font-size:12px;line-height:18px;font-weight:600}
+  .qm-cta{width:100%;height:45px;border-radius:var(--r-md);background:transparent;border:1px solid #000;color:#000;font-size:14px;font-weight:600;transition:background .15s}
+  .qm-cta:hover{background:var(--bg-soft)}
+</style>
+
+<script>
+/* ================= 结果数据 =================
+   来源：Figma 节点 157:4235（查找学习资源结果网格）。原稿右列复制了左列 5 张卡片
+   凑「共15个结果」，去重后按 10 条真实内容展示，结果数标签也相应改为「共 10 个结果」。 */
+const FIND_RESULTS = [
+  { type: '自主学习课程', typeColor: 'blue', subtags: ['CANN', '算子开发'], title: 'Ascend C 算子开发入门', desc: '从零掌握昇腾 Ascend C 算子编程模型，涵盖 Tiling 策略、核函数编写与调试全流程。', rating: '4.6', level: '初级', time: '3h', count: '2,841' },
+  { type: '学习路径', typeColor: 'green', subtags: ['CANN', '算子开发'], title: '昇腾异构编程完整路径', desc: '从硬件架构、CANN 软件栈到算子开发，系统性掌握昇腾全栈开发能力。', rating: '4.8', level: '中级', time: '12h', count: '1,406' },
+  { type: '讲师指导培训', typeColor: 'orange', subtags: ['CANN', '算子开发'], title: '算子性能调优实战营', desc: '专家讲师带你分析真实业务场景中的算子瓶颈，掌握 Profile 工具与优化手段。', rating: '4.9', level: '高级', time: '2天', count: '380' },
+  { type: '自主学习课程', typeColor: 'blue', subtags: ['CANN', '推理开发'], title: 'AscendCL 推理应用开发', desc: '基于 AscendCL 进行 AI 推理应用开发，包括模型转换、媒体数据处理与推理流程编排。', rating: '4.3', level: '中级', time: '2.5h', count: '1,406' },
+  { type: '学习路径', typeColor: 'green', subtags: ['CANN', '训练开发'], title: 'MindSpore 训练开发路径', desc: '覆盖数据准备、模型定义、分布式训练与导出的完整 MindSpore 训练开发学习路线。', rating: '4.5', level: '中级', time: '10h', count: '985' },
+  { type: '自主学习课程', typeColor: 'blue', subtags: ['生成式AI与大模型', '训练开发'], title: '大模型微调与昇腾适配', desc: '学习主流大语言模型在昇腾平台上的 LoRA 微调方法、混合精度训练与显存优化策略。', rating: '4.7', level: '高级', time: '4h', count: '1,130' },
+  { type: '学习路径', typeColor: 'green', subtags: ['生成式AI与大模型', '推理开发'], title: '生成式 AI 推理部署路径', desc: '从模型量化、转换到 vLLM+昇腾推理引擎的完整部署路径，涵盖性能调优与服务化。', rating: '4.6', level: '高级', time: '14h', count: '763' },
+  { type: '讲师指导培训', typeColor: 'orange', subtags: ['生成式AI与大模型'], title: '昇腾大模型实战训练营', desc: '3天密集营，从 LLM 原理到昇腾平台落地，讲师一对一指导完成完整大模型项目。', rating: '4.9', level: '高级', time: '3天', count: '248' },
+  { type: '自主学习课程', typeColor: 'blue', subtags: ['AI应用与智能体'], title: 'AI 智能体开发基础', desc: '学习基于昇腾平台构建 AI 智能体的方法，涵盖感知、决策与执行模块的昇腾适配实现。', rating: '4.4', level: '中级', time: '3h', count: '642' },
+  { type: '学习路径', typeColor: 'green', subtags: ['AI应用与智能体', '推理开发'], title: '端侧推理与智能体部署路径', desc: '聚焦 AI 智能体在昇腾端侧芯片的推理优化与部署，涵盖模型压缩、边缘适配与协同推理。', rating: '4.5', level: '中级', time: '9h', count: '509' },
+];
+
+function cardHTML(r){
+  const tagBg = { blue: 'var(--tag-blue-bg)', green: 'var(--tag-green-bg)', orange: 'var(--tag-orange-bg)' }[r.typeColor];
+  const tagFg = { blue: 'var(--tag-blue-fg)', green: 'var(--tag-green-fg)', orange: 'var(--tag-orange-fg)' }[r.typeColor];
+  return '<a class="find-card" href="detail.html?title=' + encodeURIComponent(r.title) + '">' +
+    '<div class="find-card-tags">' +
+      '<span class="find-tag type" style="background:' + tagBg + ';color:' + tagFg + ';">' + r.type + '</span>' +
+      r.subtags.map(t => '<span class="find-tag sub">' + t + '</span>').join('') +
+    '</div>' +
+    '<h4>' + r.title + '</h4>' +
+    '<p>' + r.desc + '</p>' +
+    '<div class="find-card-meta">' +
+      '<span class="rating">⭐ ' + r.rating + '</span>' +
+      '<span><img src="assets/icons/icon-level.svg" alt="">' + r.level + '</span>' +
+      '<span><img src="assets/icons/icon-time.svg" alt="">' + r.time + '</span>' +
+      '<span><img src="assets/icons/icon-people.svg" alt="">' + r.count + '</span>' +
+    '</div>' +
+  '</a>';
+}
+
+function renderFindResults(){
+  document.getElementById('findResultCount').textContent = '共 ' + FIND_RESULTS.length + ' 个结果';
+  document.getElementById('findGrid').innerHTML = FIND_RESULTS.map(cardHTML).join('');
+}
+
+function runFindSearch(){
+  // 仅作为原型演示：回车后刷新同一份示例结果（无真实检索后端）
+  renderFindResults();
+}
+
+// 从首页搜索面板「查看全部结果」跳转过来时，带上已输入的关键词
+(function initFromQuery(){
+  const q = new URLSearchParams(location.search).get('q');
+  if (q) document.getElementById('findSearchInput').value = q;
+  renderFindResults();
+})();
+</script>
+
+<script>
+const QUIZ_STEPS = [
+  { label: '第 1 步 / 共 3 步', headerTitle: '简单三步，祝你快速开启昇腾学习之旅', question: '你是什么角色？',
+    options: ['AI 初学者', '高校学生', '算法工程师', '应用开发者', '推理部署', '算子开发', '随便看看'] },
+  { label: '第 2 步 / 共 3 步', headerTitle: '很好，那么', question: '你的目标是？',
+    options: ['昇腾通用知识', '训练开发', '算子开发', '推理开发', '获取人才认证', '以上都有'] },
+  { label: '第 3 步 / 共 3 步', headerTitle: '好的～', question: '你当前的水平是？',
+    options: ['零基础', '熟悉 Python', '熟悉 Triton', '熟悉 C++', '熟悉 CUDA C / Ascend C'] },
+];
+let qmStep = 0;
+let qmAnswers = [];
+function openQuizMatch(){ qmStep = 0; qmAnswers = []; document.getElementById('quizMatchOverlay').classList.add('open'); renderQuizStep(); }
+function closeQuizMatch(){ document.getElementById('quizMatchOverlay').classList.remove('open'); }
+function setQmProgress(pct){ document.getElementById('qmProgressFill').style.width = pct + '%'; }
+function renderQuizStep(){
+  const body = document.getElementById('qmBody');
+  const titleEl = document.getElementById('qmTitle');
+  const subEl = document.getElementById('qmSubtitle');
+  if (typeof qmStep === 'number') {
+    const s = QUIZ_STEPS[qmStep];
+    titleEl.textContent = s.headerTitle;
+    subEl.style.display = 'none';
+    setQmProgress(qmStep / QUIZ_STEPS.length * 100);
+    body.innerHTML =
+      '<div class="qm-step-label">' + s.label + '</div>' +
+      '<div class="qm-question">' + s.question + '</div>' +
+      '<div class="qm-options">' + s.options.map((o, i) =>
+        '<button class="qm-option" onclick="pickQuizOption(' + i + ')">' + o + '</button>'
+      ).join('') + '</div>';
+  } else if (qmStep === 'loading') {
+    titleEl.textContent = '稍等片刻';
+    subEl.style.display = 'none';
+    body.innerHTML = '<div class="qm-loading"><div class="qm-spinner"></div><div class="qm-loading-text">正在为你匹配学习路径…</div></div>';
+  } else if (qmStep === 'result') {
+    titleEl.textContent = '学习路径匹配';
+    subEl.textContent = '回答 3 道题，为你推荐最合适的资源';
+    subEl.style.display = 'block';
+    setQmProgress(100);
+    body.innerHTML =
+      '<div class="qm-result">' +
+        '<div class="qm-result-emoji">🎉</div>' +
+        '<div class="qm-result-heading">已为你匹配最合适的学习路径</div>' +
+        '<div class="qm-tags">' + qmAnswers.map(a => '<span class="qm-tag">' + a + '</span>').join('') + '</div>' +
+        '<button class="qm-cta" onclick="closeQuizMatch()">查看专属推荐</button>' +
+      '</div>';
+  }
+}
+function pickQuizOption(i){
+  const s = QUIZ_STEPS[qmStep];
+  qmAnswers.push(s.options[i]);
+  if (qmStep < QUIZ_STEPS.length - 1) { qmStep++; renderQuizStep(); }
+  else { qmStep = 'loading'; renderQuizStep(); setTimeout(() => { qmStep = 'result'; renderQuizStep(); }, 1200); }
+}
+</script>
+</body>
+</html>

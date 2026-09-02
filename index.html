@@ -38,7 +38,7 @@
 <div class="search-panel" id="searchPanel" style="left:108px;top:303px;"></div>
 <div class="subnav" style="left:216.0px;top:343.0px;width:1488.0px;height:56.0px;">
 <span class="subnav-item" style="left:432.0px;top:18.0px;font-weight:600;color:var(--color-text-primary);">概览</span>
-<span class="subnav-item" style="left:496.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">查找学习资源</span>
+<a class="subnav-item" href="find.html" style="left:496.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">查找学习资源</a>
 <span class="subnav-item" style="left:624.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">学习路径</span>
 <span class="subnav-item" style="left:720.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">自主学习课程</span>
 <span class="subnav-item" style="left:848.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">讲师指导培训</span>
@@ -306,7 +306,7 @@ function renderSearchPanel(query){
           '</div>' +
         '</div>'
       ).join('') + '</div>' +
-      '<a class="sp-view-all" href="#">查看全部结果 →</a>';
+      '<a class="sp-view-all" href="find.html?q=' + encodeURIComponent(query) + '">查看全部结果 →</a>';
   }
 }
 
