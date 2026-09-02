@@ -82,10 +82,11 @@
   .pg-course-meta .rating{color:var(--brand)}
 
   .pg-cert-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
-  .pg-cert-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:20px}
+  .pg-cert-card{display:block;background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:20px}
+  .pg-cert-card img{display:block;width:100%;height:auto;border-radius:var(--r-sm);margin-bottom:14px}
   .pg-cert-card h5{font-size:16px;font-weight:600;color:#000;margin-bottom:10px}
   .pg-cert-card p{font-size:13px;color:var(--ink-2);line-height:1.5}
-  .pg-faq-title{font-size:22px;font-weight:600;margin-bottom:20px}
+  .pg-faq-title{font-size:22px;font-weight:600;margin:60px 0 20px}
   .pg-faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px}
   .pg-faq-item{padding-bottom:16px;border-bottom:1px solid var(--line-2)}
   .pg-faq-q{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px}
@@ -99,7 +100,8 @@
      「专属推荐」楼层同一套卡片样式（.rec-card 系列） */
   .rec-widget{position:relative;background:#fff;border:1px solid #9B9B9B;border-radius:var(--r-lg);padding:24px 32px;overflow:hidden;margin-bottom:32px}
   .rec-widget::before{content:'';position:absolute;top:-80px;right:-60px;width:420px;height:420px;background:radial-gradient(circle, rgba(84,120,251,0.14), rgba(152,74,246,0.10) 60%, transparent 72%);border-radius:50%;pointer-events:none}
-  .rec-widget-head{position:relative;display:flex;align-items:center;margin-bottom:20px}
+  .rec-star{position:absolute;left:20px;top:20px;width:27px;height:31px}
+  .rec-widget-head{position:relative;display:flex;align-items:center;margin-bottom:20px;padding-left:29px}
   .rec-widget-label{background:linear-gradient(115deg,rgba(223,212,251,.6),rgba(222,209,253,.9));color:#730CFF;font-size:13px;font-weight:600;border-radius:999px;padding:6px 16px;margin-right:20px}
   .rec-chips{display:flex;gap:12px;flex-wrap:wrap;flex:1}
   .rec-chip{background:#fff;border:1px solid #DFDFDF;border-radius:var(--r-sm);padding:7px 14px;font-size:12px;color:#000}
@@ -145,6 +147,7 @@
 </div>
 <div class="pg-body">
 <div class="rec-widget">
+  <img class="rec-star" src="assets/images/rec-star.png" alt="">
   <div class="rec-widget-head">
     <span class="rec-widget-label">推荐课程</span>
     <div class="rec-chips"><span class="rec-chip">AI初学者</span><span class="rec-chip">学习昇腾通用知识</span><span class="rec-chip">熟悉Python</span></div>
