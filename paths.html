@@ -132,7 +132,7 @@
      子页面共用同一套样式与交互，仅入口触发按钮沿用各页面自己的徽章样式） ===== */
 
   .comp-wrap{position:relative;flex:none}
-  .comp-panel{position:absolute;right:0;top:calc(100% + 10px);width:400px;max-height:80vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(16,24,40,.18),0 4px 12px rgba(16,24,40,.10);z-index:60;display:none}
+  .comp-panel{position:fixed;width:400px;max-height:80vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(16,24,40,.18),0 4px 12px rgba(16,24,40,.10);z-index:200;display:none}
   .comp-panel.open{display:block}
   .comp-head{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid #F3F3F3}
   .comp-head img{width:24px;height:24px;flex:none}
@@ -280,17 +280,31 @@
 </div><div class="pg-grid"><a class="pg-card" href="detail.html?title=AscendC算子开发"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>AscendC算子开发</h4></div><p>从零基础出发，涵盖昇腾硬件架构、CANN 软件栈、模型训练与推理的完整学习路线。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a><a class="pg-card" href="detail.html?title=CATLASS算子开发"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>CATLASS算子开发</h4></div><p>面向有 C++ 基础的开发者，系统学习 Ascend C 算子编程模型、Tiling 策略与调优方法。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a><a class="pg-card" href="detail.html?title=Triton算子开发"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>Triton算子开发</h4></div><p>涵盖模型转换、ATC 工具链、AscendCL 推理框架集成与性能调优的端到端路径。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a><a class="pg-card" href="detail.html?title=算子开发调试调优"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>算子开发调试调优</h4></div><p>深入 CANN 各层架构，从 HAL 到上层 API，全面掌握昇腾软硬件协同开发能力。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a></div></div>
 <img class="pg-footer-img" src="assets/images/footer-visual.png" alt="">
 <script>
-  function compToggle(e){e.stopPropagation();document.getElementById('compPanel').classList.toggle('open');}
+  function compToggle(e){
+    e.stopPropagation();
+    var panel=document.getElementById('compPanel');
+    var trigger=e.currentTarget;
+    var willOpen=!panel.classList.contains('open');
+    if(willOpen){
+      var r=trigger.getBoundingClientRect();
+      panel.style.top=(r.bottom+10)+'px';
+      panel.style.right=(window.innerWidth-r.right)+'px';
+    }
+    panel.classList.toggle('open');
+  }
   function compClose(){document.getElementById('compPanel').classList.remove('open');}
   document.addEventListener('click',function(e){
     var panel=document.getElementById('compPanel');
     if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&!e.target.closest('.comp-trigger'))panel.classList.remove('open');
   });
   function compToggleSection(name){
+    var otherName=name==='progress'?'next':'progress';
+    var currentlyOpen=!document.getElementById('compSec-'+name).classList.contains('closed');
+    var target=currentlyOpen?otherName:name;
     ['progress','next'].forEach(function(s){
       var head=document.querySelector('.comp-sec-head[data-sec="'+s+'"]');
       var body=document.getElementById('compSec-'+s);
-      if(s===name){head.classList.remove('closed');body.classList.remove('closed');}
+      if(s===target){head.classList.remove('closed');body.classList.remove('closed');}
       else{head.classList.add('closed');body.classList.add('closed');}
     });
   }

@@ -118,7 +118,7 @@
   /* ===== 我的学伴 下拉面板（来自 Figma 节点 188:24234 / 188:24346 / 188:24427，
      4 个学习子页面共用同一套样式与交互，仅入口触发按钮沿用各页面自己的徽章样式） ===== */
   .comp-wrap{position:relative;flex:none}
-  .comp-panel{position:absolute;right:0;top:calc(100% + 10px);width:400px;max-height:80vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(16,24,40,.18),0 4px 12px rgba(16,24,40,.10);z-index:60;display:none}
+  .comp-panel{position:fixed;width:400px;max-height:80vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(16,24,40,.18),0 4px 12px rgba(16,24,40,.10);z-index:200;display:none}
   .comp-panel.open{display:block}
   .comp-head{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid #F3F3F3}
   .comp-head img{width:24px;height:24px;flex:none}
@@ -450,17 +450,31 @@ function pickQuizOption(i){
 }
 
 /* ===== 我的学伴 下拉面板 ===== */
-function compToggle(e){e.stopPropagation();document.getElementById('compPanel').classList.toggle('open');}
+function compToggle(e){
+  e.stopPropagation();
+  var panel=document.getElementById('compPanel');
+  var trigger=e.currentTarget;
+  var willOpen=!panel.classList.contains('open');
+  if(willOpen){
+    var r=trigger.getBoundingClientRect();
+    panel.style.top=(r.bottom+10)+'px';
+    panel.style.right=(window.innerWidth-r.right)+'px';
+  }
+  panel.classList.toggle('open');
+}
 function compClose(){document.getElementById('compPanel').classList.remove('open');}
 document.addEventListener('click',function(e){
   var panel=document.getElementById('compPanel');
   if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&!e.target.closest('.comp-trigger'))panel.classList.remove('open');
 });
 function compToggleSection(name){
+  var otherName=name==='progress'?'next':'progress';
+  var currentlyOpen=!document.getElementById('compSec-'+name).classList.contains('closed');
+  var target=currentlyOpen?otherName:name;
   ['progress','next'].forEach(function(s){
     var head=document.querySelector('.comp-sec-head[data-sec="'+s+'"]');
     var body=document.getElementById('compSec-'+s);
-    if(s===name){head.classList.remove('closed');body.classList.remove('closed');}
+    if(s===target){head.classList.remove('closed');body.classList.remove('closed');}
     else{head.classList.add('closed');body.classList.add('closed');}
   });
 }
