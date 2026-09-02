@@ -94,8 +94,36 @@
   .pg-intro{font-size:16px;color:rgba(0,0,0,0.6);margin-bottom:16px}
   .pg-footer-img{display:block;width:100%;height:auto}
 
+  /* 推荐组件（来自 Figma 节点 160:6261 Group 34，每个子页面顶部都有一份，
+     标签文字换成 推荐路径/推荐课程/推荐培训/推荐认证），复用与首页
+     「专属推荐」楼层同一套卡片样式（.rec-card 系列） */
+  .rec-widget{position:relative;background:#fff;border:1px solid #9B9B9B;border-radius:var(--r-lg);padding:24px 32px;overflow:hidden;margin-bottom:32px}
+  .rec-widget::before{content:'';position:absolute;top:-80px;right:-60px;width:420px;height:420px;background:radial-gradient(circle, rgba(84,120,251,0.14), rgba(152,74,246,0.10) 60%, transparent 72%);border-radius:50%;pointer-events:none}
+  .rec-widget-head{position:relative;display:flex;align-items:center;margin-bottom:20px}
+  .rec-widget-label{background:linear-gradient(115deg,rgba(223,212,251,.6),rgba(222,209,253,.9));color:#730CFF;font-size:13px;font-weight:600;border-radius:999px;padding:6px 16px;margin-right:20px}
+  .rec-chips{display:flex;gap:12px;flex-wrap:wrap;flex:1}
+  .rec-chip{background:#fff;border:1px solid #DFDFDF;border-radius:var(--r-sm);padding:7px 14px;font-size:12px;color:#000}
+  .rec-widget-right{display:flex;align-items:center;gap:20px;flex:none}
+  .rec-edit-link{font-size:14px;color:var(--ink-2);cursor:pointer}
+  .rec-edit-link:hover{color:var(--ink)}
+  .rec-close{width:20px;height:20px;display:flex;align-items:center;justify-content:center;color:var(--ink-3);cursor:pointer}
+  .rec-cards{position:relative;display:flex;gap:15px}
+  .rec-card{flex:1;min-width:0;background:#fff;border:1px solid var(--line-2);border-radius:var(--r-lg);padding:18px 20px}
+  .rec-card-top{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .rec-card-tag{flex:none;border-radius:var(--r-lg);padding:5px 11px 6px;font-size:12px;border:1px solid}
+  .rec-card-match{font-size:12px;color:var(--ink-2);padding-left:12px;border-left:1px solid rgba(0,0,0,.1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rec-card h4{font-size:18px;font-weight:600;color:#000;margin-bottom:12px}
+  .rec-card p{font-size:14px;line-height:1.4;color:var(--ink-2);margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .rec-card-meta{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--ink-2)}
+  .rec-card-meta .rating{color:var(--brand)}
+  .rec-card-meta span{display:inline-flex;align-items:center;gap:4px}
+  .rec-card-meta img{width:12px;height:12px}
+
+  .pg-kg-title{font-size:22px;font-weight:600;margin:40px 0 16px}
+  .pg-kg-img{display:block;width:100%;height:auto;border-radius:var(--r-lg);border:1px solid var(--line)}
+
   @media (max-width: 900px) {
-    .pg-grid, .pg-course-grid, .pg-cert-row, .pg-faq-grid { grid-template-columns: 1fr; }
+    .pg-grid, .pg-course-grid, .pg-cert-row, .pg-faq-grid, .rec-cards { grid-template-columns: 1fr; flex-direction: column; }
   }
 </style>
 </head>
@@ -116,6 +144,17 @@
   </div>
 </div>
 <div class="pg-body">
+<div class="rec-widget">
+  <div class="rec-widget-head">
+    <span class="rec-widget-label">推荐培训</span>
+    <div class="rec-chips"><span class="rec-chip">AI初学者</span><span class="rec-chip">学习昇腾通用知识</span><span class="rec-chip">熟悉Python</span></div>
+    <div class="rec-widget-right">
+      <span class="rec-edit-link" onclick="alert('可在测一测里修改你的答案')">修改</span>
+      <span class="rec-close" onclick="this.closest('.rec-widget').remove()">✕</span>
+    </div>
+  </div>
+  <div class="rec-cards"><div class="rec-card"><div class="rec-card-top"><span class="rec-card-tag" style="border-color:#AF2EFA;color:#AF2EFA;">讲师指导培训</span><span class="rec-card-match">AscendC 算子开发</span></div><h4>AscendC 算子开发</h4><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-card-meta"><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">2.5h</span><span><img src="assets/icons/icon-people.svg" alt="">1406</span></div></div><div class="rec-card"><div class="rec-card-top"><span class="rec-card-tag" style="border-color:#AF2EFA;color:#AF2EFA;">讲师指导培训</span><span class="rec-card-match">CATLASS算子开发</span></div><h4>CATLASS算子开发</h4><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-card-meta"><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">2.5h</span><span><img src="assets/icons/icon-people.svg" alt="">1406</span></div></div><div class="rec-card"><div class="rec-card-top"><span class="rec-card-tag" style="border-color:#AF2EFA;color:#AF2EFA;">讲师指导培训</span><span class="rec-card-match">AscendC 算子开发</span></div><h4>算子开发调试调优</h4><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-card-meta"><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">2.5h</span><span><img src="assets/icons/icon-people.svg" alt="">1406</span></div></div></div>
+</div>
 <div class="pg-intro">精选课程</div><div class="pg-cat-heading">AscendC 算子开发</div><div class="pg-course-grid"><a class="pg-course-card" href="detail.html?title=AscendC算子开发简单Vector算子开发"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">Ascend C算子开发</span></div><h5>AscendC算子开发简单Vector算子开发</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=AscendC进阶泛化Vector算子开发"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">AscendC算子开发</span></div><h5>AscendC进阶泛化Vector算子开发</h5><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=算子开发调试调优"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">Ascend C算子开发</span></div><h5>算子开发调试调优</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a></div><div class="pg-cat-heading">CATLASS算子开发</div><div class="pg-course-grid"><a class="pg-course-card" href="detail.html?title=CATLASS算子开发"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">CATLASS算子开发</span></div><h5>CATLASS算子开发</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=CATLASS算子开发进阶"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">CATLASS算子开发</span></div><h5>CATLASS算子开发进阶</h5><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=CANN技术架构的变与不变"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">Triton算子开发</span></div><h5>CANN技术架构的变与不变</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a></div><div class="pg-cat-heading">Triton算子开发</div><div class="pg-course-grid"><a class="pg-course-card" href="detail.html?title=CANN算子开发全链路体验升级"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">Triton算子开发</span></div><h5>CANN算子开发全链路体验升级</h5><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=算子开发调试调优"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">算子开发调试调优</span></div><h5>算子开发调试调优</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=MindStudio实战精讲-算子调试工具"><div class="top"><span class="pg-course-tag orange">讲师指导培训</span><span class="match">算子开发调试调优</span></div><h5>MindStudio实战精讲-算子调试工具</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a></div></div>
 <img class="pg-footer-img" src="assets/images/footer-visual.png" alt="">
 </body>
