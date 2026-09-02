@@ -102,11 +102,11 @@
 <div class="scenario-strip-bottom" style="left:216.0px;top:1571.0px;width:1488.0px;height:446.0px;"></div>
 <div class="scenario-tag-bg" id="scenarioTagBg" style="left:224.0px;top:1461.0px;width:486.0px;height:90.0px;"></div>
 <img class="ph-img" id="scenarioIcon" src="assets/images/glass-icon.png" alt="" style="left:579.0px;top:1436.0px;width:141.0px;height:141.0px;">
-<div class="txt" id="scenarioTitle0" style="left:248.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-brand-red-dark);text-align:left;white-space:nowrap;transition:color 0.2s;">CANN</div>
+<div class="txt" id="scenarioTitle0" style="left:248.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">CANN</div>
 <div class="txt" style="left:248.0px;top:1509.0px;width:255.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">华为针对AI场景推出的异构计算架构</div>
-<div class="txt" id="scenarioTitle1" style="left:741.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;transition:color 0.2s;">生成式AI与模型</div>
+<div class="txt" id="scenarioTitle1" style="left:741.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">生成式AI与模型</div>
 <div class="txt" style="left:741.0px;top:1509.0px;width:290.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">根据已经学习的内容生成新的内容</div>
-<div class="txt" id="scenarioTitle2" style="left:1232.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;transition:color 0.2s;">AI应用与智能体</div>
+<div class="txt" id="scenarioTitle2" style="left:1232.0px;top:1481.0px;width:255.0px;height:20.0px;font-size:18.0px;line-height:20.0px;font-weight:600;color:var(--color-text-primary);text-align:left;white-space:nowrap;">AI应用与智能体</div>
 <div class="txt" style="left:1232.0px;top:1509.0px;width:255.0px;height:22.0px;font-size:16.0px;line-height:22.0px;font-weight:400;color:var(--color-text-secondary);text-align:left;white-space:nowrap;">自主感知环境，进行独立思考</div>
 <div class="scenario-tab-hit" onclick="selectScenario(0)" style="left:224.0px;top:1461.0px;width:493.0px;height:90.0px;"></div>
 <div class="scenario-tab-hit" onclick="selectScenario(1)" style="left:717.0px;top:1461.0px;width:493.0px;height:90.0px;"></div>
@@ -431,20 +431,33 @@ function goToRecommendation(){
 /* ================= 按开发场景选择：3 个 Tab 互相切换 =================
    来源：Figma 节点 120:205 / 124:603 / 124:858，三个页面分别是 CANN /
    生成式AI与模型 / AI应用与智能体 被选中时的状态（白色玻璃底 + 玻璃图标
-   叠在被选中的分类上）。位置按各分类文字的 left 值统一推算，图标复用
-   同一张 glass-icon.png（Figma 原稿三态图标略有大小差异，这里简化为一致）。 */
+   叠在被选中的分类上）。位置按各分类文字的 left 值统一推算；标题文字
+   始终为黑色，不随选中状态变化。 */
 const SCENARIO_TABS = [
   { left: 248 }, // CANN
   { left: 741 }, // 生成式AI与模型
   { left: 1232 }, // AI应用与智能体
 ];
+// 每个分类的玻璃拟态图标在 Figma 原稿中大小、相对胶囊背景的偏移都不同
+// （CANN 141x141 溢出胶囊上方25px；另外两个 99x99/98x98 贴胶囊右边缘，
+// 只上溢4px），按 Figma 节点 124:856 / 124:1114 逐一还原，不再复用同一张图。
+const SCENARIO_ICONS = [
+  { src: 'assets/images/glass-icon.png', w: 141, h: 141, dx: 355, dy: -25 },
+  { src: 'assets/images/glass-icon-genai.png', w: 99, h: 99, dx: 387, dy: -4 },
+  { src: 'assets/images/glass-icon-agent.png', w: 98, h: 98, dx: 388, dy: -4 },
+];
 function selectScenario(i){
   const t = SCENARIO_TABS[i];
-  document.getElementById('scenarioTagBg').style.left = (t.left - 24) + 'px';
-  document.getElementById('scenarioIcon').style.left = (t.left + 331) + 'px';
-  for (let j = 0; j < SCENARIO_TABS.length; j++) {
-    document.getElementById('scenarioTitle' + j).style.color = j === i ? 'var(--color-brand-red-dark)' : 'var(--color-text-primary)';
-  }
+  const pillLeft = t.left - 24;
+  const pillTop = 1461;
+  document.getElementById('scenarioTagBg').style.left = pillLeft + 'px';
+  const icon = document.getElementById('scenarioIcon');
+  const ic = SCENARIO_ICONS[i];
+  icon.src = ic.src;
+  icon.style.width = ic.w + 'px';
+  icon.style.height = ic.h + 'px';
+  icon.style.left = (pillLeft + ic.dx) + 'px';
+  icon.style.top = (pillTop + ic.dy) + 'px';
 }
 </script>
 </body>
