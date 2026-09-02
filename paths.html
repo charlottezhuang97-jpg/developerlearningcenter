@@ -127,6 +127,54 @@
   @media (max-width: 900px) {
     .pg-grid, .pg-course-grid, .pg-cert-row, .pg-faq-grid, .rec-cards { grid-template-columns: 1fr; flex-direction: column; }
   }
+
+  /* ===== 我的学伴 下拉面板（来自 Figma 节点 188:24234 / 188:24346 / 188:24427，
+     子页面共用同一套样式与交互，仅入口触发按钮沿用各页面自己的徽章样式） ===== */
+
+  .comp-wrap{position:relative;flex:none}
+  .comp-panel{position:absolute;right:0;top:calc(100% + 10px);width:400px;max-height:80vh;overflow-y:auto;background:#fff;border-radius:16px;box-shadow:0 16px 48px rgba(16,24,40,.18),0 4px 12px rgba(16,24,40,.10);z-index:60;display:none}
+  .comp-panel.open{display:block}
+  .comp-head{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid #F3F3F3}
+  .comp-head img{width:24px;height:24px;flex:none}
+  .comp-head span{flex:1;font-size:14px;font-weight:600;color:#101828}
+  .comp-close{width:15px;height:15px;flex:none;color:#99A1AF}
+  .comp-close:hover{color:#101828}
+  .comp-sec-head{width:100%;display:flex;align-items:center;gap:8px;padding:14px 20px;font-size:13px;font-weight:600;color:#101828}
+  .comp-sec-head:hover{background:#FAFAFB}
+  .comp-sec-head .ic{width:16px;height:16px;flex:none;display:flex}
+  .comp-sec-head .chev{margin-left:auto;flex:none;transition:transform .2s}
+  .comp-sec-head.closed .chev{transform:rotate(180deg)}
+  .comp-sec-body{padding:0 20px 16px;max-height:640px;overflow:hidden;transition:max-height .25s ease}
+  .comp-sec-body.closed{max-height:0;padding-top:0;padding-bottom:0}
+  .comp-stat-row{display:flex;gap:12px;padding:11px 0}
+  .comp-stat-row+.comp-stat-row{border-top:1px solid #F3F3F3}
+  .comp-stat-box{flex:none;width:60px;border-radius:10px;text-align:center;padding:10px 4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .comp-stat-box b{font-size:18px;font-weight:600;line-height:1}
+  .comp-stat-box span{font-size:9px;font-weight:500}
+  .comp-stat-items{flex:1;min-width:0;display:flex;flex-direction:column;gap:11px}
+  .comp-stat-item .row1{display:flex;align-items:center;justify-content:space-between;font-size:11px;gap:8px;margin-bottom:5px}
+  .comp-stat-item .row1 .t{color:#101828;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .comp-stat-item .row1 .n{color:#9BA1AB;flex:none}
+  .comp-bar{height:4px;border-radius:999px;background:#EDEDED;overflow:hidden}
+  .comp-bar-fill{height:100%;background:#2E53FA;border-radius:999px}
+  .comp-stat-item .row2{display:flex;justify-content:flex-end;font-size:9px;color:#9BA1AB;margin-top:4px}
+  .comp-cert-item{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#101828;gap:8px}
+  .comp-cert-item+.comp-cert-item{margin-top:9px}
+  .comp-cert-pill{flex:none;border-radius:999px;padding:3px 10px 3px 8px;font-size:9px;font-weight:600;color:#fff;display:flex;align-items:center;gap:4px;white-space:nowrap}
+  .comp-tabs{display:flex;gap:2px;background:#F2F3F5;border-radius:8px;padding:3px;margin-bottom:12px}
+  .comp-tab{flex:1;padding:6px;border-radius:6px;border:none;background:none;font-family:inherit;cursor:pointer;font-size:12px;font-weight:600;color:#9BA1AB}
+  .comp-tab.active{background:#fff;color:#101828}
+  .comp-list.closed{display:none}
+  .comp-item{display:flex;align-items:flex-start;gap:10px;padding:10px;border-radius:10px}
+  .comp-item.hi{background:#F9F9F9}
+  .comp-num{flex:none;width:20px;height:20px;border-radius:50%;background:linear-gradient(135deg,#2E53FA,#7B25F4);color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  .comp-item.plan .comp-num{background:#000}
+  .comp-item-body{flex:1;min-width:0}
+  .comp-item-body h5{font-size:12px;font-weight:400;color:#101828;margin-bottom:3px}
+  .comp-item.hi .comp-item-body h5{text-decoration:underline}
+  .comp-item-body p{font-size:10px;color:#9BA1AB;line-height:1.5}
+  .comp-item-arrow{flex:none;color:#9BA1AB;margin-top:3px}
+
 </style>
 </head>
 <body>
@@ -138,7 +186,69 @@
     <div class="pg-nav-links">
       <a href="index.html" class="strong">开发者学习中心</a><a href="index.html">概览</a><a href="find.html">查找学习资源</a><a href="paths.html" class="strong">学习路径</a><a href="courses.html">自主学习课程</a><a href="training.html">讲师指导培训</a><a href="certification.html">开发者认证</a>
     </div>
-    <div class="pg-companion-badge">我的学伴</div>
+    <div class="comp-wrap">
+      <button class="pg-companion-badge comp-trigger" onclick="compToggle(event)">我的学伴</button>
+      <div class="comp-panel" id="compPanel">
+  <div class="comp-head">
+    <img src="assets/images/companion-icon.png" alt="">
+    <span>我的学伴</span>
+    <svg class="comp-close" onclick="compClose()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </div>
+  <div>
+    <button class="comp-sec-head" data-sec="progress" onclick="compToggleSection('progress')">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c3-1 5-1 8 1 3-2 5-2 8-1v13c-3-1-5-1-8 1-3-2-5-2-8-1z"/></svg>
+      <span>学习进度</span>
+      <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+    <div class="comp-sec-body" id="compSec-progress">
+      <div class="comp-stat-row">
+        <div class="comp-stat-box" style="background:#FDF4FF;color:#9333EA"><b>2</b><span>学习路径</span></div>
+        <div class="comp-stat-items">
+          <div class="comp-stat-item"><div class="row1"><span class="t">算子开发工程师成长路径</span><span class="n">3/8节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:45%"></div></div><div class="row2">45%</div></div>
+          <div class="comp-stat-item"><div class="row1"><span class="t">CANN 全栈开发路径</span><span class="n">1/6节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:20%"></div></div><div class="row2">20%</div></div>
+        </div>
+      </div>
+      <div class="comp-stat-row">
+        <div class="comp-stat-box" style="background:#EFF6FF;color:#2E53FA"><b>2</b><span>课程</span></div>
+        <div class="comp-stat-items">
+          <div class="comp-stat-item"><div class="row1"><span class="t">Ascend C 算子开发入门</span><span class="n">9/12节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:78%"></div></div><div class="row2">78%</div></div>
+          <div class="comp-stat-item"><div class="row1"><span class="t">AscendCL 推理应用开发</span><span class="n">3/9节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:33%"></div></div><div class="row2">33%</div></div>
+        </div>
+      </div>
+      <div class="comp-stat-row">
+        <div class="comp-stat-box" style="background:#FFDFC8;color:#FA832E"><b>2</b><span>开发者认证</span></div>
+        <div class="comp-stat-items">
+          <div class="comp-cert-item"><span>HCIP-AI 算子开发方向</span><span class="comp-cert-pill" style="background:#058EF0">● 考试阅卷中</span></div>
+          <div class="comp-cert-item"><span>HCIA-AI 昇腾基础认证</span><span class="comp-cert-pill" style="background:#158040">✓ 证书已发放</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button class="comp-sec-head closed" data-sec="next" onclick="compToggleSection('next')">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h13a3 3 0 013 3v13H7a3 3 0 01-3-3z"/><path d="M4 4v13a3 3 0 003 3"/></svg>
+      <span>接下来学</span>
+      <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+    <div class="comp-sec-body closed" id="compSec-next">
+      <div class="comp-tabs">
+        <button class="comp-tab active" data-t="rec" onclick="compSwitchTab('rec')">推荐</button>
+        <button class="comp-tab" data-t="plan" onclick="compSwitchTab('plan')">我的计划</button>
+      </div>
+      <div class="comp-list" id="compList-rec">
+        <div class="comp-item "><div class="comp-num">1</div><div class="comp-item-body"><h5>矢量算子编写进阶</h5><p>深入 Ascend C 矢量计算 API，掌握复杂算子的实现与调试方法。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+        <div class="comp-item "><div class="comp-num">2</div><div class="comp-item-body"><h5>Tiling 切分策略详解</h5><p>理解 Tiling 基本原理，编写支持多种数据规模的自适应切分策略。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+        <div class="comp-item "><div class="comp-num">3</div><div class="comp-item-body"><h5>融合算子开发实战</h5><p>把多个单算子合并为一个融合算子，显著降低数据搬运开销。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+      </div>
+      <div class="comp-list closed" id="compList-plan">
+        <div class="comp-item plan hi"><div class="comp-num">1</div><div class="comp-item-body"><h5>多核并行计算</h5><p>利用多个 AI Core 并行协同完成大规模张量计算，掌握核间同步机制。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+        <div class="comp-item plan"><div class="comp-num">2</div><div class="comp-item-body"><h5>Profiling 分析</h5><p>使用昇腾 Profiling 工具解读算子执行时间线，定位性能热点。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+        <div class="comp-item plan"><div class="comp-num">3</div><div class="comp-item-body"><h5>推理开发实战</h5><p>把多个单算子合并为一个融合算子，显著降低数据搬运开销。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
   </nav>
   <div class="pg-hero">
     <h1>学习路径</h1>
@@ -169,5 +279,27 @@
   <span class="pg-chip">AI与应用智能体</span>
 </div><div class="pg-grid"><a class="pg-card" href="detail.html?title=AscendC算子开发"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>AscendC算子开发</h4></div><p>从零基础出发，涵盖昇腾硬件架构、CANN 软件栈、模型训练与推理的完整学习路线。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a><a class="pg-card" href="detail.html?title=CATLASS算子开发"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>CATLASS算子开发</h4></div><p>面向有 C++ 基础的开发者，系统学习 Ascend C 算子编程模型、Tiling 策略与调优方法。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a><a class="pg-card" href="detail.html?title=Triton算子开发"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>Triton算子开发</h4></div><p>涵盖模型转换、ATC 工具链、AscendCL 推理框架集成与性能调优的端到端路径。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a><a class="pg-card" href="detail.html?title=算子开发调试调优"><div class="pg-card-top"><span class="pg-card-tag">学习路径</span><h4>算子开发调试调优</h4></div><p>深入 CANN 各层架构，从 HAL 到上层 API，全面掌握昇腾软硬件协同开发能力。</p><div class="pg-card-meta"><span>3 课程 · 1 证书</span><span class="rating">⭐ 4.0</span><span><img src="assets/icons/icon-level.svg" alt="">中级</span><span><img src="assets/icons/icon-time.svg" alt="">20h</span><span><img src="assets/icons/icon-people.svg" alt="">3,210</span></div></a></div></div>
 <img class="pg-footer-img" src="assets/images/footer-visual.png" alt="">
+<script>
+  function compToggle(e){e.stopPropagation();document.getElementById('compPanel').classList.toggle('open');}
+  function compClose(){document.getElementById('compPanel').classList.remove('open');}
+  document.addEventListener('click',function(e){
+    var panel=document.getElementById('compPanel');
+    if(panel&&panel.classList.contains('open')&&!panel.contains(e.target)&&!e.target.closest('.comp-trigger'))panel.classList.remove('open');
+  });
+  function compToggleSection(name){
+    ['progress','next'].forEach(function(s){
+      var head=document.querySelector('.comp-sec-head[data-sec="'+s+'"]');
+      var body=document.getElementById('compSec-'+s);
+      if(s===name){head.classList.remove('closed');body.classList.remove('closed');}
+      else{head.classList.add('closed');body.classList.add('closed');}
+    });
+  }
+  function compSwitchTab(name){
+    ['rec','plan'].forEach(function(t){
+      document.querySelector('.comp-tab[data-t="'+t+'"]').classList.toggle('active', t===name);
+      document.getElementById('compList-'+t).classList.toggle('closed', t!==name);
+    });
+  }
+</script>
 </body>
 </html>
