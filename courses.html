@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自主学习课程 · Ascend Developer</title>
+<style>
+  :root{
+    --brand:#C7000B;
+    --ink:#101828;
+    --ink-2:#5A6069;
+    --ink-3:#99A1AF;
+    --line:#E5E7EB;
+    --line-2:#F3F3F3;
+    --bg:#FFFFFF;
+    --bg-soft:#F5F6FA;
+    --tag-blue-bg:#EFF6FF; --tag-blue-fg:#2563EB;
+    --tag-green-bg:#F0FDF4; --tag-green-fg:#15803D;
+    --tag-orange-bg:#FFF7ED; --tag-orange-fg:#C2410C;
+    --tag-purple-fg:#912EFA;
+    --font:'HarmonyOS Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+    --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px;
+    --shadow-lg:0px 4px 6px rgba(0,0,0,.1);
+  }
+  @font-face{ font-family:'HarmonyOS Sans SC'; src:url('assets/fonts/HarmonyOS_Sans_SC_Regular.woff2') format('woff2'); font-weight:400; font-style:normal; font-display:swap; }
+  @font-face{ font-family:'HarmonyOS Sans SC'; src:url('assets/fonts/HarmonyOS_Sans_SC_Medium.woff2') format('woff2'); font-weight:600; font-style:normal; font-display:swap; }
+  @font-face{ font-family:'HarmonyOS Sans SC'; src:url('assets/fonts/HarmonyOS_Sans_SC_Bold.woff2') format('woff2'); font-weight:700; font-style:normal; font-display:swap; }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg-soft);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+
+  /* 页头结构与 find.html 一致：局部导航条叠在渐变+插画横幅上（同一套设计令牌） */
+  .pg-header{position:relative;height:260px;overflow:hidden;background:#fff}
+  .pg-banner-base{position:absolute;inset:0;background:linear-gradient(90deg,#E1E7FF 0%,rgba(182,197,254,.05) 10.2%,rgba(221,233,255,.05) 88%,#DED1FD 96.2%);}
+  .pg-banner-img{position:absolute;right:22px;top:-91px;width:848px;max-width:60%;height:auto}
+  .pg-banner-fade{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(180deg,rgba(244,245,247,0) 0%,var(--bg-soft) 100%);}
+  .pg-nav{position:relative;z-index:2;height:60px;background:#fff;display:flex;align-items:center;padding:0 32px;gap:32px}
+  .pg-nav-links{display:flex;align-items:center;gap:32px;font-size:15px;color:#000;flex:1}
+  .pg-nav-links a{color:#000}
+  .pg-nav-links a:hover{opacity:.7}
+  .pg-nav-links a.strong{font-weight:700}
+  .pg-companion-badge{flex:none;border-radius:999px;padding:5px 20px;font-size:14px;color:#730CFF;background:linear-gradient(115deg,rgba(223,212,251,.5),rgba(222,209,253,.8));}
+  .pg-hero{position:relative;z-index:1;max-width:1128px;margin:0 auto;padding:40px 24px 0;text-align:center}
+  .pg-hero h1{font-size:40px;font-weight:600;color:var(--ink)}
+  .pg-hero p{font-size:16px;color:var(--ink-2);margin-top:12px}
+
+  .pg-body{max-width:1488px;margin:0 auto;padding:32px 24px 64px}
+  .pg-tabs{display:flex;gap:32px;border-bottom:1px solid var(--line);margin-bottom:24px}
+  .pg-tab{padding:0 0 16px;font-size:18px;color:var(--ink);cursor:pointer;position:relative}
+  .pg-tab.active{font-weight:600}
+  .pg-tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--ink)}
+  .pg-filters{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+  .pg-filters .label{font-size:16px;font-weight:600;color:var(--ink)}
+  .pg-chip{border-radius:999px;padding:6px 20px;font-size:16px;background:#E9E9E9;color:#000}
+  .pg-chip.active{background:#fff;border:1px solid var(--ink)}
+
+  .pg-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .pg-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:20px}
+  .pg-card-top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .pg-card-tag{border-radius:999px;padding:5px 12px;font-size:12px;border:1px solid var(--tag-purple-fg);color:var(--tag-purple-fg)}
+  .pg-card h4{font-size:15px;font-weight:600;color:var(--ink)}
+  .pg-card p{font-size:12px;color:var(--ink-2);margin-bottom:14px;line-height:1.5}
+  .pg-card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px;font-size:14px;color:var(--ink-3)}
+  .pg-card-meta .rating{color:var(--brand)}
+  .pg-card-meta span{display:inline-flex;align-items:center;gap:4px}
+  .pg-card-meta img{width:14px;height:14px}
+
+  .pg-cat-heading{font-size:20px;font-weight:600;color:var(--ink);margin:32px 0 16px}
+  .pg-cat-heading:first-child{margin-top:0}
+  .pg-course-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .pg-course-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:18px}
+  .pg-course-card .top{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .pg-course-tag{border-radius:999px;padding:4px 10px;font-size:11px}
+  .pg-course-tag.blue{background:var(--tag-blue-bg);color:var(--tag-blue-fg)}
+  .pg-course-tag.orange{background:var(--tag-orange-bg);color:var(--tag-orange-fg)}
+  .pg-course-card .match{font-size:11px;color:var(--ink-3)}
+  .pg-course-card h5{font-size:15px;font-weight:600;color:#000;margin-bottom:10px}
+  .pg-course-card p{font-size:12px;color:var(--ink-2);margin-bottom:12px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .pg-course-meta{display:flex;flex-wrap:wrap;gap:10px;font-size:12px;color:var(--ink-2)}
+  .pg-course-meta .rating{color:var(--brand)}
+
+  .pg-cert-row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:40px}
+  .pg-cert-card{background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:20px}
+  .pg-cert-card h5{font-size:16px;font-weight:600;color:#000;margin-bottom:10px}
+  .pg-cert-card p{font-size:13px;color:var(--ink-2);line-height:1.5}
+  .pg-faq-title{font-size:22px;font-weight:600;margin-bottom:20px}
+  .pg-faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 32px}
+  .pg-faq-item{padding-bottom:16px;border-bottom:1px solid var(--line-2)}
+  .pg-faq-q{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:8px}
+  .pg-faq-a{font-size:14px;color:var(--ink-2);line-height:1.6}
+
+  .pg-intro{font-size:16px;color:rgba(0,0,0,0.6);margin-bottom:16px}
+  .pg-footer-img{display:block;width:100%;height:auto}
+
+  @media (max-width: 900px) {
+    .pg-grid, .pg-course-grid, .pg-cert-row, .pg-faq-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="pg-header">
+  <div class="pg-banner-base"></div>
+  <img class="pg-banner-img" src="assets/images/find-banner.png" alt="">
+  <div class="pg-banner-fade"></div>
+  <nav class="pg-nav">
+    <div class="pg-nav-links">
+      <a href="index.html" class="strong">开发者学习中心</a><a href="index.html">概览</a><a href="find.html">查找学习资源</a><a href="paths.html">学习路径</a><a href="courses.html" class="strong">自主学习课程</a><a href="training.html">讲师指导培训</a><a href="certification.html">开发者认证</a>
+    </div>
+    <div class="pg-companion-badge">我的学伴</div>
+  </nav>
+  <div class="pg-hero">
+    <h1>自主学习课程</h1>
+    <p>自由安排课程进行学习与实验，一站式资源供你按需选择学习内容</p>
+  </div>
+</div>
+<div class="pg-body">
+<div class="pg-intro">精选课程</div><div class="pg-cat-heading">AscendC 算子开发</div><div class="pg-course-grid"><a class="pg-course-card" href="detail.html?title=AscendC算子开发简单Vector算子开发"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">Ascend C算子开发</span></div><h5>AscendC算子开发简单Vector算子开发</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=AscendC进阶泛化Vector算子开发"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">AscendC算子开发</span></div><h5>AscendC进阶泛化Vector算子开发</h5><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=算子开发调试调优"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">Ascend C算子开发</span></div><h5>算子开发调试调优</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a></div><div class="pg-cat-heading">CATLASS算子开发</div><div class="pg-course-grid"><a class="pg-course-card" href="detail.html?title=CATLASS算子开发"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">CATLASS算子开发</span></div><h5>CATLASS算子开发</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=CATLASS算子开发进阶"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">CATLASS算子开发</span></div><h5>CATLASS算子开发进阶</h5><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=CANN技术架构的变与不变"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">Triton算子开发</span></div><h5>CANN技术架构的变与不变</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a></div><div class="pg-cat-heading">Triton算子开发</div><div class="pg-course-grid"><a class="pg-course-card" href="detail.html?title=CANN算子开发全链路体验升级"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">Triton算子开发</span></div><h5>CANN算子开发全链路体验升级</h5><p>介绍基于CATLASS算子进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与...</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=算子开发调试调优"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">算子开发调试调优</span></div><h5>算子开发调试调优</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a><a class="pg-course-card" href="detail.html?title=MindStudio实战精讲-算子调试工具"><div class="top"><span class="pg-course-tag blue">自主学习课程</span><span class="match">算子开发调试调优</span></div><h5>MindStudio实战精讲-算子调试工具</h5><p>介绍基于AscendCL进行AI应用开发，包括AscendCL概述、模型转换与推理、媒体数据处理、单算子加载与执行、动态</p><div class="pg-course-meta"><span class="rating">⭐ 4.0</span><span>中级</span><span>2.5h</span><span>1406</span></div></a></div></div>
+<img class="pg-footer-img" src="assets/images/footer-visual.png" alt="">
+</body>
+</html>
