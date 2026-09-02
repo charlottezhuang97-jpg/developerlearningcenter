@@ -221,6 +221,15 @@
   .code-body{padding:16px;font-family:var(--mono);font-size:13.5px;line-height:1.75;color:#E6E9EF;overflow-x:auto;white-space:pre}
   .tk-kw{color:#FF7B72}.tk-fn{color:#D2A8FF}.tk-str{color:#A5D6FF}.tk-cm{color:#8B949E}
 
+  /* 代码示例 tab：一节课内的多段代码有先后步骤关系，部分步骤来自视频中的
+     知识点标记（点击时间戳跳转视频进度条并复用 openCapture 面板） */
+  .code-step{display:flex;align-items:center;gap:10px;margin:0 0 10px 2px}
+  .code-step:not(:first-child){margin-top:var(--sp-4)}
+  .step-num{width:22px;height:22px;flex:none;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center}
+  .step-t{font-size:14px;font-weight:700;color:var(--ink)}
+  .step-src{margin-left:auto;display:flex;align-items:center;gap:5px;font-size:12px;color:var(--brand);padding:4px 10px;border:1px solid var(--brand);border-radius:999px;transition:background .15s;flex:none}
+  .step-src:hover{background:var(--brand-soft)}
+
   .err-item{background:var(--bg);border:1px solid var(--line);border-radius:var(--r-md);padding:16px 18px;margin-bottom:12px;transition:box-shadow .15s}
   .err-item:hover{box-shadow:var(--shadow-1)}
   .err-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
@@ -481,6 +490,22 @@
   .ws-term-line{color:var(--ink)}
   .ws-term-line .prompt{color:var(--mark-code);font-weight:700}
 
+  /* 右侧栏空白处的 IDE 实践迷你面板（复用全屏 IDE 里的 .cell 系列样式，
+     默认展开，用户可以关闭；关闭后右下角留一个小圆按钮可以重新打开） */
+  .ide-dock{position:fixed;top:121px;right:24px;bottom:24px;width:380px;background:var(--bg);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--shadow-float);z-index:40;display:none;flex-direction:column;overflow:hidden}
+  .ide-dock.open{display:flex}
+  .ide-dock-head{flex:none;display:flex;align-items:center;gap:8px;padding:14px 16px;border-bottom:1px solid var(--line);background:var(--bg-soft)}
+  .ide-dock-title{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--ink)}
+  .ide-dock-tools{margin-left:auto;display:flex;gap:4px}
+  .ide-dock-tools button{width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center;color:var(--ink-2)}
+  .ide-dock-tools button:hover{background:var(--line)}
+  .ide-dock-body{flex:1;overflow-y:auto;padding:16px}
+  .ide-dock-hint{font-size:12.5px;color:var(--ink-2);margin-bottom:14px;line-height:1.6}
+  .ide-dock-reopen{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--ink);color:#fff;display:none;place-items:center;box-shadow:var(--shadow-float);z-index:40;transition:transform .15s}
+  .ide-dock-reopen:hover{transform:scale(1.06)}
+  .ide-dock-reopen.show{display:grid}
+  @media (max-width:1400px){.ide-dock{display:none!important}.ide-dock-reopen{display:none!important}}
+
   .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:80;box-shadow:var(--shadow-2)}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast .ic{color:#8CF5C4;margin-right:6px}
@@ -709,6 +734,10 @@
       <button class="tab" onclick="switchTab('docs',this)">相关文档 <span class="count">3</span></button>
     </div>
     <div class="tab-panel active" id="panel-code">
+      <div class="code-step">
+        <span class="step-num">1</span>
+        <span class="step-t">检测 NPU 是否可用</span>
+      </div>
       <div class="code-block">
         <div class="code-bar"><span class="name">check_npu.py</span><div class="ops"><button class="code-op" onclick="toast('已复制到剪贴板')">复制</button><button class="code-op">✨ AI 解释</button></div></div>
         <div class="code-body"><span class="tk-kw">import</span> torch
@@ -717,11 +746,28 @@
 <span class="tk-kw">assert</span> torch.npu.<span class="tk-fn">is_available</span>(), <span class="tk-str">'未检测到可用昇腾 NPU'</span>
 <span class="tk-fn">print</span>(torch.npu.<span class="tk-fn">get_device_name</span>(<span class="tk-str">0</span>))</div>
       </div>
+
+      <div class="code-step">
+        <span class="step-num">2</span>
+        <span class="step-t">查看 CANN 安装路径</span>
+        <button class="step-src" onclick="jumpToVideo('code')"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>视频 03:41</button>
+      </div>
       <div class="code-block">
         <div class="code-bar"><span class="name">cann_version.py</span><div class="ops"><button class="code-op" onclick="toast('已复制到剪贴板')">复制</button><button class="code-op">✨ AI 解释</button></div></div>
         <div class="code-body"><span class="tk-cm"># 查看 CANN 软件包版本与安装路径</span>
 <span class="tk-kw">import</span> os
 <span class="tk-fn">print</span>(os.environ.<span class="tk-fn">get</span>(<span class="tk-str">'ASCEND_HOME_PATH'</span>))</div>
+      </div>
+
+      <div class="code-step">
+        <span class="step-num">3</span>
+        <span class="step-t">列出已加载的算子包</span>
+        <button class="step-src" onclick="jumpToVideo('code2')"><svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>视频 06:55</button>
+      </div>
+      <div class="code-block">
+        <div class="code-bar"><span class="name">list_packages.py</span><div class="ops"><button class="code-op" onclick="toast('已复制到剪贴板')">复制</button><button class="code-op">✨ AI 解释</button></div></div>
+        <div class="code-body"><span class="tk-kw">from</span> cann <span class="tk-kw">import</span> opp
+<span class="tk-fn">print</span>(opp.<span class="tk-fn">list_packages</span>())</div>
       </div>
     </div>
     <div class="tab-panel" id="panel-err">
@@ -963,6 +1009,27 @@ print(result.stdout)</div>
   </div>
 </div>
 
+<div class="ide-dock open" id="ideDock">
+  <div class="ide-dock-head">
+    <span class="ide-dock-title"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>IDE 实践</span>
+    <div class="ide-dock-tools">
+      <button onclick="openIDE()" title="全屏打开"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg></button>
+      <button onclick="closeIdeDock()" title="收起"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+  <div class="ide-dock-body">
+    <div class="ide-dock-hint">跟着视频动手验证一下当前环境，随时可以运行。</div>
+    <div class="cell">
+      <div class="cell-bar"><span class="cell-idx">[1]</span><span class="cell-type code">CODE</span><div class="cell-ops"><button class="cell-op run" onclick="runCell(this,'dockOut1')"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>运行</button></div></div>
+      <div class="cell-body"># 检查 CANN 环境
+import acl
+print(acl.rt.get_version())</div>
+      <div class="cell-out" id="dockOut1"><span class="ok">✓</span> (7, 0, 0)</div>
+    </div>
+  </div>
+</div>
+<button class="ide-dock-reopen" id="ideDockReopen" onclick="openIdeDock()" title="打开 IDE 实践"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg></button>
+
 <div class="toast" id="toast"><span class="ic">✓</span><span id="toastMsg">已完成</span></div>
 
 <div class="kg-overlay" id="kgOverlay">
@@ -1027,10 +1094,10 @@ print(result.stdout)</div>
   })();
 
   const capData={
-    key:{badge:'重要知识点',cls:'key',time:'01:32',text:'CANN 软件栈自上而下分为：应用层 → 图引擎(GE) → 算子库(OPP) → 运行时(Runtime) → 驱动(Driver)。',code:null},
-    code:{badge:'代码示例',cls:'code',time:'03:41',text:'查看当前 CANN 安装路径：',code:"import os\nprint(os.environ.get('ASCEND_HOME_PATH'))",file:'check_path.py'},
-    key2:{badge:'重要知识点',cls:'key',time:'05:18',text:'Runtime 负责设备内存管理与任务下发，是 Host 与 Device 之间的桥梁。',code:null},
-    code2:{badge:'代码示例',cls:'code',time:'06:55',text:'列出已加载的算子包：',code:"from cann import opp\nprint(opp.list_packages())",file:'list_packages.py'}
+    key:{badge:'重要知识点',cls:'key',time:'01:32',pct:18,text:'CANN 软件栈自上而下分为：应用层 → 图引擎(GE) → 算子库(OPP) → 运行时(Runtime) → 驱动(Driver)。',code:null},
+    code:{badge:'代码示例',cls:'code',time:'03:41',pct:44,text:'查看当前 CANN 安装路径：',code:"import os\nprint(os.environ.get('ASCEND_HOME_PATH'))",file:'cann_version.py'},
+    key2:{badge:'重要知识点',cls:'key',time:'05:18',pct:62,text:'Runtime 负责设备内存管理与任务下发，是 Host 与 Device 之间的桥梁。',code:null},
+    code2:{badge:'代码示例',cls:'code',time:'06:55',pct:81,text:'列出已加载的算子包：',code:"from cann import opp\nprint(opp.list_packages())",file:'list_packages.py'}
   };
   let curCap=null;
   function renderCap(d){
@@ -1042,6 +1109,19 @@ print(result.stdout)</div>
   }
   function openCapture(k,el){const d=capData[k];curCap=k;const b=document.getElementById('capBadge');b.textContent=d.badge;b.className='cap-badge '+d.cls;document.getElementById('capTime').textContent=d.time;document.getElementById('capContent').innerHTML=renderCap(d);document.getElementById('capEdit').value='';document.getElementById('capEdit').classList.remove('show');document.getElementById('editToggle').textContent='编辑后采集';document.getElementById('capture').classList.add('open');}
   function closeCapture(){document.getElementById('capture').classList.remove('open');}
+  function jumpToVideo(k){
+    const d=capData[k];
+    if(!d)return;
+    document.querySelector('.video-card').classList.remove('img-on');
+    if(d.pct!=null){
+      document.querySelector('.video-played').style.width=d.pct+'%';
+      document.querySelector('.video-head').style.left=d.pct+'%';
+    }
+    document.querySelector('.video-title-ov').textContent='▶ 2.1 CANN 软件包分层 · '+d.time;
+    document.querySelector('.video-card').scrollIntoView({behavior:'smooth',block:'start'});
+    openCapture(k);
+    toast('已跳转到视频 '+d.time);
+  }
   function toggleEdit(){const t=document.getElementById('capEdit'),b=document.getElementById('editToggle');const d=capData[curCap];if(!t.classList.contains('show')){t.classList.add('show');t.value=d.text;b.textContent='收起编辑';t.focus();}else{t.classList.remove('show');b.textContent='编辑后采集';}}
   let mineCount=2;
   function collectKP(){mineCount++;document.getElementById('mineCount').textContent=mineCount;const d=capData[curCap];const edited=document.getElementById('capEdit');const txt=edited.classList.contains('show')&&edited.value.trim()?edited.value.trim():d.text;const el=document.createElement('div');el.className='kp';let h='<div class="kp-top"><span class="kp-tag '+d.cls+'">'+(d.cls==='key'?'重要知识点':'代码片段')+'</span><span class="kp-src">来自 2.1 · '+d.time+'</span></div><div class="kp-txt">'+txt+'</div>';if(d.code)h+='<div class="kp-code">'+d.code+'</div>';el.innerHTML=h;document.getElementById('kpList').prepend(el);closeCapture();toast('已采集到个人总结');}
@@ -1151,6 +1231,8 @@ print(result.stdout)</div>
   /* ===== IDE 实战 ===== */
   function openIDE(){document.getElementById('ide').classList.add('open');document.body.style.overflow='hidden';}
   function closeIDE(){document.getElementById('ide').classList.remove('open');document.body.style.overflow='';}
+  function closeIdeDock(){document.getElementById('ideDock').classList.remove('open');document.getElementById('ideDockReopen').classList.add('show');}
+  function openIdeDock(){document.getElementById('ideDock').classList.add('open');document.getElementById('ideDockReopen').classList.remove('show');}
   function runCell(btn,outId){const out=document.getElementById(outId);out.classList.add('show');const idx=btn.closest('.cell').querySelector('.cell-idx');idx.textContent='[*]';setTimeout(()=>{idx.textContent=idx.textContent.replace('*',Math.floor(Math.random()*9+2));},400);}
   function switchWS(id,el){document.querySelectorAll('.ws-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.ws-view').forEach(v=>v.classList.remove('active'));document.getElementById('ws-'+id).classList.add('active');}
 
