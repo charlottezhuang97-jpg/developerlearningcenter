@@ -103,7 +103,7 @@
   .layout.docked-toc ~ * .toc-trigger,body.toc-docked .toc-trigger{display:none}
 
   /* 目录悬浮浮窗 */
-  .toc-pop{position:fixed;top:106px;left:200px;width:340px;max-height:70vh;background:var(--bg);border:1px solid var(--line);
+  .toc-pop{position:fixed;width:340px;max-height:70vh;background:var(--bg);border:1px solid var(--line);
     border-radius:var(--r-lg);box-shadow:var(--shadow-float);z-index:55;display:flex;flex-direction:column;overflow:hidden;
     opacity:0;transform:translateY(-8px);pointer-events:none;transition:opacity .18s,transform .18s}
   .toc-pop.open{opacity:1;transform:translateY(0);pointer-events:auto}
@@ -145,14 +145,14 @@
   .sub a.active::before{content:"▸ ";color:var(--ink)}
 
   .main{padding:var(--sp-6)}
-  .main-inner{max-width:860px;margin:0 auto}
+  .main-inner{max-width:1060px;margin:0 auto}
   .content-head{margin-bottom:var(--sp-5)}
   .eyebrow{font-size:13px;color:var(--ink-3);margin-bottom:8px}
   .content-head h2{font-size:28px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px}
   .content-head .lede{font-size:15px;color:var(--ink-2);max-width:70ch}
 
   .video-card{background:#000;border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-2);position:relative}
-  .video-frame{aspect-ratio:16/9;background:radial-gradient(120% 120% at 30% 20%,#1c2230 0%,#0c0f16 60%);position:relative;display:grid;place-items:center}
+  .video-frame{aspect-ratio:1060/600;background:linear-gradient(rgba(10,12,17,.2),rgba(10,12,17,.55)),url('assets/images/detail-video-cover.jpg') center/cover no-repeat;position:relative;display:grid;place-items:center}
   .play-btn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);display:grid;place-items:center;border:1.5px solid rgba(255,255,255,.35);transition:transform .15s}
   .play-btn:hover{transform:scale(1.06)}
   .video-title-ov{position:absolute;left:20px;top:18px;color:#fff;font-size:14px;opacity:.9}
@@ -184,7 +184,7 @@
   .vc-opt.on{color:#8CF5C4}
 
   .capture{background:var(--bg);border:1px solid var(--line);border-top:none;border-radius:0 0 var(--r-lg) var(--r-lg);padding:0 20px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s}
-  .capture.open{max-height:400px;padding:18px 20px 20px;box-shadow:var(--shadow-2)}
+  .capture.open{max-height:460px;padding:18px 20px 20px;box-shadow:var(--shadow-2)}
   .capture-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
   .cap-badge{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;color:#fff}
   .cap-badge.key{background:var(--mark-key)}
@@ -193,7 +193,7 @@
   .cap-close{margin-left:auto;color:var(--ink-3);width:28px;height:28px;border-radius:var(--r-sm);display:grid;place-items:center}
   .cap-close:hover{background:var(--bg-soft)}
   .cap-body{font-size:14px;margin-bottom:14px}
-  .cap-code{background:var(--bg-code);color:#E6E9EF;border-radius:var(--r-md);padding:14px 16px;font-family:var(--mono);font-size:13px;line-height:1.7;overflow-x:auto;white-space:pre}
+  .capture .code-block{margin-bottom:0}
   .cap-edit{width:100%;margin-top:10px;padding:10px 12px;border:1px solid var(--line);border-radius:var(--r-sm);font-family:inherit;font-size:13.5px;color:var(--ink);resize:vertical;min-height:56px;display:none}
   .cap-edit.show{display:block}
   .cap-actions{display:flex;align-items:center;gap:10px;margin-top:14px}
@@ -228,6 +228,12 @@
   .err-name{font-weight:600}
   .err-desc{font-size:14px;color:var(--ink-2)}
   .err-fix{margin-top:8px;font-size:13px;color:var(--ink-2);padding:10px 12px;background:var(--bg-soft);border-radius:var(--r-sm);border-left:3px solid var(--mark-code)}
+
+  .doc-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:10px;transition:box-shadow .15s,border-color .15s}
+  .doc-item:hover{box-shadow:var(--shadow-1);border-color:var(--ink-3)}
+  .doc-ic{width:36px;height:36px;flex:none;border-radius:var(--r-sm);background:var(--bg-soft);display:grid;place-items:center;color:var(--ink-2)}
+  .doc-name{flex:1;min-width:0;font-size:14px;font-weight:600;color:var(--ink)}
+  .doc-type{font-size:12px;color:var(--ink-3);flex:none}
 
   /* ============ AI 分身 ============ */
   .ai-panel{position:fixed;top:128px;right:24px;width:var(--panelW);height:600px;background:var(--bg);border-radius:var(--r-xl);box-shadow:var(--shadow-float);z-index:60;display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateX(30px) scale(.98);pointer-events:none;transition:opacity .25s,transform .25s;min-width:340px;min-height:360px}
@@ -700,6 +706,7 @@
       <button class="tab active" onclick="switchTab('code',this)">代码示例 <span class="count">3</span></button>
       <button class="tab" onclick="switchTab('err',this)">常见错误码 <span class="count">5</span></button>
       <button class="tab" onclick="switchTab('quiz',this)">随堂测试 <span class="count">3</span></button>
+      <button class="tab" onclick="switchTab('docs',this)">相关文档 <span class="count">3</span></button>
     </div>
     <div class="tab-panel active" id="panel-code">
       <div class="code-block">
@@ -721,6 +728,23 @@
       <div class="err-item"><div class="err-top"><span class="err-code">EI0006</span><span class="err-name">未检测到 NPU 设备</span></div><div class="err-desc">运行时无法识别昇腾 NPU，通常是驱动未安装或环境变量未生效。</div><div class="err-fix">修复：确认已安装 driver 与 firmware，并执行 source set_env.sh</div></div>
       <div class="err-item"><div class="err-top"><span class="err-code">EE1001</span><span class="err-name">torch_npu 导入失败</span></div><div class="err-desc">torch_npu 与 torch 版本不匹配，import 时报 undefined symbol。</div><div class="err-fix">修复：安装与当前 PyTorch 版本对应的 torch_npu。</div></div>
       <div class="err-item"><div class="err-top"><span class="err-code">EL0004</span><span class="err-name">算子编译失败</span></div><div class="err-desc">Ascend C 算子在 build 阶段找不到头文件或工具链。</div><div class="err-fix">修复：检查 CANN 版本与 SDK 路径，确保 include 目录已加入编译参数。</div></div>
+    </div>
+    <div class="tab-panel" id="panel-docs">
+      <a class="doc-item" href="#" onclick="toast('文档预览功能开发中');return false;">
+        <span class="doc-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span>
+        <span class="doc-name">CANN 软件栈架构白皮书</span>
+        <span class="doc-type">PDF</span>
+      </a>
+      <a class="doc-item" href="#" onclick="toast('文档预览功能开发中');return false;">
+        <span class="doc-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span>
+        <span class="doc-name">昇腾算子开发指南</span>
+        <span class="doc-type">PDF</span>
+      </a>
+      <a class="doc-item" href="#" onclick="toast('文档预览功能开发中');return false;">
+        <span class="doc-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></svg></span>
+        <span class="doc-name">环境变量配置说明</span>
+        <span class="doc-type">网页</span>
+      </a>
     </div>
     <div class="tab-panel" id="panel-quiz">
       <div class="quiz-intro">
@@ -1004,12 +1028,18 @@ print(result.stdout)</div>
 
   const capData={
     key:{badge:'重要知识点',cls:'key',time:'01:32',text:'CANN 软件栈自上而下分为：应用层 → 图引擎(GE) → 算子库(OPP) → 运行时(Runtime) → 驱动(Driver)。',code:null},
-    code:{badge:'代码示例',cls:'code',time:'03:41',text:'查看当前 CANN 安装路径：',code:"import os\nprint(os.environ.get('ASCEND_HOME_PATH'))"},
+    code:{badge:'代码示例',cls:'code',time:'03:41',text:'查看当前 CANN 安装路径：',code:"import os\nprint(os.environ.get('ASCEND_HOME_PATH'))",file:'check_path.py'},
     key2:{badge:'重要知识点',cls:'key',time:'05:18',text:'Runtime 负责设备内存管理与任务下发，是 Host 与 Device 之间的桥梁。',code:null},
-    code2:{badge:'代码示例',cls:'code',time:'06:55',text:'列出已加载的算子包：',code:"from cann import opp\nprint(opp.list_packages())"}
+    code2:{badge:'代码示例',cls:'code',time:'06:55',text:'列出已加载的算子包：',code:"from cann import opp\nprint(opp.list_packages())",file:'list_packages.py'}
   };
   let curCap=null;
-  function renderCap(d){let h='<div class="cap-body">'+d.text+'</div>';if(d.code)h+='<div class="cap-code">'+d.code+'</div>';return h;}
+  function renderCap(d){
+    let h='<div class="cap-body">'+d.text+'</div>';
+    if(d.code){
+      h+='<div class="code-block"><div class="code-bar"><span class="name">'+(d.file||'code.py')+'</span><div class="ops"><button class="code-op" onclick="toast(\'已复制到剪贴板\')">复制</button></div></div><div class="code-body">'+d.code+'</div></div>';
+    }
+    return h;
+  }
   function openCapture(k,el){const d=capData[k];curCap=k;const b=document.getElementById('capBadge');b.textContent=d.badge;b.className='cap-badge '+d.cls;document.getElementById('capTime').textContent=d.time;document.getElementById('capContent').innerHTML=renderCap(d);document.getElementById('capEdit').value='';document.getElementById('capEdit').classList.remove('show');document.getElementById('editToggle').textContent='编辑后采集';document.getElementById('capture').classList.add('open');}
   function closeCapture(){document.getElementById('capture').classList.remove('open');}
   function toggleEdit(){const t=document.getElementById('capEdit'),b=document.getElementById('editToggle');const d=capData[curCap];if(!t.classList.contains('show')){t.classList.add('show');t.value=d.text;b.textContent='收起编辑';t.focus();}else{t.classList.remove('show');b.textContent='编辑后采集';}}
@@ -1020,7 +1050,18 @@ print(result.stdout)</div>
   function switchRV(id,el){document.querySelectorAll('.rv-tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.rv-view').forEach(v=>v.classList.remove('active'));document.getElementById('rv-'+id).classList.add('active');}
   function foldReview(){document.getElementById('reviewBody').classList.toggle('closed');document.getElementById('rvFold').classList.toggle('closed');}
   /* 目录:悬浮浮窗 <-> 左栏常驻 */
-  function toggleToc(e){if(e)e.stopPropagation();const pop=document.getElementById('tocPop'),tr=document.getElementById('tocTrigger');pop.classList.toggle('open');tr.classList.toggle('on', pop.classList.contains('open'));}
+  function toggleToc(e){
+    if(e)e.stopPropagation();
+    const pop=document.getElementById('tocPop'),tr=document.getElementById('tocTrigger');
+    const willOpen=!pop.classList.contains('open');
+    if(willOpen){
+      const r=tr.getBoundingClientRect();
+      pop.style.top=(r.bottom+8)+'px';
+      pop.style.left=r.left+'px';
+    }
+    pop.classList.toggle('open');
+    tr.classList.toggle('on', pop.classList.contains('open'));
+  }
   function closeToc(){document.getElementById('tocPop').classList.remove('open');document.getElementById('tocTrigger').classList.remove('on');}
   function dockToc(){document.getElementById('layout').classList.add('docked-toc');document.body.classList.add('toc-docked');document.getElementById('dockSwitch').classList.add('on');closeToc();}
   function undockToc(){document.getElementById('layout').classList.remove('docked-toc');document.body.classList.remove('toc-docked');document.getElementById('dockSwitch').classList.remove('on');}
