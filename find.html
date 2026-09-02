@@ -138,12 +138,16 @@
   .comp-stat-box b{font-size:18px;font-weight:600;line-height:1}
   .comp-stat-box span{font-size:9px;font-weight:500}
   .comp-stat-items{flex:1;min-width:0;display:flex;flex-direction:column;gap:11px}
+  .comp-stat-item{display:block;padding:4px 6px;margin:-4px -6px;border-radius:8px;cursor:pointer;transition:background .12s}
+  .comp-stat-item:hover{background:#F9F9F9}
   .comp-stat-item .row1{display:flex;align-items:center;justify-content:space-between;font-size:11px;gap:8px;margin-bottom:5px}
   .comp-stat-item .row1 .t{color:#101828;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .comp-stat-item .row1 .n{color:#9BA1AB;flex:none}
+  .comp-stat-item:hover .row1 .t{text-decoration:underline}
+  .comp-stat-item .row1 .meta{display:flex;align-items:center;gap:6px;flex:none;color:#9BA1AB}
+  .comp-stat-item .row1 .meta .sep{width:1px;height:9px;background:#D9D9D9}
+  .comp-stat-item .row1 .meta .pct{color:#9BA1AB}
   .comp-bar{height:4px;border-radius:999px;background:#EDEDED;overflow:hidden}
   .comp-bar-fill{height:100%;background:#2E53FA;border-radius:999px}
-  .comp-stat-item .row2{display:flex;justify-content:flex-end;font-size:9px;color:#9BA1AB;margin-top:4px}
   .comp-cert-item{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:#101828;gap:8px}
   .comp-cert-item+.comp-cert-item{margin-top:9px}
   .comp-cert-pill{flex:none;border-radius:999px;padding:3px 10px 3px 8px;font-size:9px;font-weight:600;color:#fff;display:flex;align-items:center;gap:4px;white-space:nowrap}
@@ -197,15 +201,15 @@
             <div class="comp-stat-row">
               <div class="comp-stat-box" style="background:#FDF4FF;color:#9333EA"><b>2</b><span>学习路径</span></div>
               <div class="comp-stat-items">
-                <div class="comp-stat-item"><div class="row1"><span class="t">算子开发工程师成长路径</span><span class="n">3/8节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:45%"></div></div><div class="row2">45%</div></div>
-                <div class="comp-stat-item"><div class="row1"><span class="t">CANN 全栈开发路径</span><span class="n">1/6节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:20%"></div></div><div class="row2">20%</div></div>
+                <a class="comp-stat-item" href="detail.html?title=算子开发工程师成长路径"><div class="row1"><span class="t">算子开发工程师成长路径</span><span class="meta"><span class="n">3/8节</span><span class="sep"></span><span class="pct">45%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:45%"></div></div></a>
+                <a class="comp-stat-item" href="detail.html?title=CANN 全栈开发路径"><div class="row1"><span class="t">CANN 全栈开发路径</span><span class="meta"><span class="n">1/6节</span><span class="sep"></span><span class="pct">20%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:20%"></div></div></a>
               </div>
             </div>
             <div class="comp-stat-row">
               <div class="comp-stat-box" style="background:#EFF6FF;color:#2E53FA"><b>2</b><span>课程</span></div>
               <div class="comp-stat-items">
-                <div class="comp-stat-item"><div class="row1"><span class="t">Ascend C 算子开发入门</span><span class="n">9/12节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:78%"></div></div><div class="row2">78%</div></div>
-                <div class="comp-stat-item"><div class="row1"><span class="t">AscendCL 推理应用开发</span><span class="n">3/9节</span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:33%"></div></div><div class="row2">33%</div></div>
+                <a class="comp-stat-item" href="detail.html?title=Ascend C 算子开发入门"><div class="row1"><span class="t">Ascend C 算子开发入门</span><span class="meta"><span class="n">9/12节</span><span class="sep"></span><span class="pct">78%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:78%"></div></div></a>
+                <a class="comp-stat-item" href="detail.html?title=AscendCL 推理应用开发"><div class="row1"><span class="t">AscendCL 推理应用开发</span><span class="meta"><span class="n">3/9节</span><span class="sep"></span><span class="pct">33%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:33%"></div></div></a>
               </div>
             </div>
             <div class="comp-stat-row">
