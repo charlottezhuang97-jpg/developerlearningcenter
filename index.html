@@ -35,6 +35,11 @@
 <span class="search-icon"></span>
 <input type="text" class="search-input" id="searchInput" placeholder="今天你想学点什么" autocomplete="off" oninput="onSearchInput(this.value)" onfocus="onSearchFocus()">
 </div>
+<div class="announce-bar" style="left:108.0px;top:299.0px;width:900.0px;">
+<img class="announce-icon" src="assets/images/announce-icon.svg" alt="">
+<span class="announce-text">Ascend for PyTorch 社区相关组件名称规范统一预告</span>
+<span class="announce-date">2026/06/30</span>
+</div>
 </section>
 <!-- 搜索下拉面板挪到 .banner 外面：.banner 现在有 overflow:hidden 来裁剪
      banner-visual 向上溢出的部分，如果面板还在里面，展开的搜索结果会被一起裁掉 -->
@@ -54,10 +59,6 @@
 <button class="subnav-badge">我的学伴</button>
 </div>
 </nav>
-<button class="float-btn" style="left:1840.0px;top:1035.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
-<button class="float-btn" style="left:1840.0px;top:1079.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
-<button class="float-btn" style="left:1840.0px;top:1123.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
-<button class="float-btn" style="left:1840.0px;top:1167.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
 <section class="intro" id="floorDefault">
 <div class="txt" style="left:704.5px;top:439.0px;width:555.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">什么是开发者学习中心（DLC）</div>
 <div class="intro-card" style="left:238.0px;top:529.0px;width:1488.0px;height:238.0px;"></div>
@@ -80,7 +81,14 @@
   <div class="rec-cards" id="recCards"></div>
 </div>
 </section>
-<div id="belowFloor1" style="position:relative;top:0px;transition:top 0.3s ease;">
+<!-- #belowFloor1 是 position:relative（用来做楼层整体位移的定位上下文），
+     它前面现在多了 .nav/.subnav-flow-spacer/#subnavSentinel/.subnav 这几个
+     新增的 in-flow 吸顶元素（合计 400px 高：64+279+1+56），会把 #belowFloor1
+     自己在文档流里的位置往下推 400px；由于它是定位上下文，其内部所有
+     position:absolute 的子元素坐标都是"页面根坐标"，一旦 #belowFloor1 的
+     流内位置偏移，子元素就会跟着多偏移 400px（第一/二楼层间距变得巨大的
+     原因）。用 margin-top:-400px 把这个偏移抵消掉，让它等效仍在 (0,0)。 -->
+<div id="belowFloor1" style="position:relative;margin-top:-400px;top:0px;transition:top 0.3s ease;">
 <section class="learn-type">
 <div class="txt" style="left:820.0px;top:839.0px;width:280.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">按学习类型选择</div>
 <div class="txt" style="left:322.0px;top:901.0px;width:1275.0px;height:18.0px;font-size:16.0px;line-height:18.0px;font-weight:600;color:var(--color-text-secondary);text-align:center;white-space:nowrap;">选择一种类型，为你提供一个最合适的学习资源</div>

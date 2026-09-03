@@ -174,6 +174,18 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 }
 .search-input::placeholder { color: var(--color-text-muted); }
 
+/* 搜索框下面的新课程上线公告条 */
+.announce-bar {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-text-primary);
+}
+.announce-icon { width: 14px; height: 14px; flex: none; }
+.announce-date { color: var(--color-text-muted); flex: none; }
+
 /* ================= Search panel (default/初始/激活/悬浮) =================
    内容/颜色/间距来自 Figma 节点 164:2712(初始面板) / 165:4366(激活/悬浮，
    两者结构相同，悬浮态只多一个「加入学习计划」按钮)。 */
@@ -288,17 +300,19 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
    来匹配同一个吸附临界点，一旦哨兵离开这个收缩后的视口顶部就加上 .stuck。 */
 .subnav-flow-spacer { height: 279px; }
 .subnav {
+  /* height 定死不随 .stuck 变化：sticky 元素仍占用自己的流内高度，如果高度
+     跟着状态变化，会让 #belowFloor1 及其后所有楼层的坐标基准也跟着抖动
+     （见 #belowFloor1 margin-top:-400px 处的说明）。 */
   position: sticky;
   top: 64px;
   z-index: 20;
   width: 1920px;
   height: 56px;
   background: transparent;
-  transition: background 0.25s ease, box-shadow 0.25s ease, height 0.25s ease;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
 }
 .subnav.stuck {
   background: var(--color-bg-surface);
-  height: 60px;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 12px rgba(16, 24, 40, 0.06);
 }
 .subnav-inner {
