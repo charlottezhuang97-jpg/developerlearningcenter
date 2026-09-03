@@ -81,7 +81,11 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   height: 2503px;
   margin: 0 auto;
   background: var(--color-bg-subtle);
-  overflow: hidden; /* clips content that bleeds above y=0 (banner visual), matching the Figma frame */
+  /* overflow:hidden used to live here, but it breaks position:sticky for any descendant
+     (any ancestor with overflow != visible constrains sticky) — the only thing it was
+     protecting against is the banner-visual image bleeding above y=0, so that clip is
+     now scoped to .banner itself (which is position:absolute + its own overflow:hidden,
+     so it doesn't touch the sticky sub-nav's ancestor chain). */
 }
 
 /* Section wrappers are NOT positioning contexts — every element inside them uses
@@ -94,10 +98,14 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 
 /* ================= Nav ================= */
 .nav {
-  position: absolute;
-  left: 0; top: 0; width: 1920px; height: 64px;
+  /* sticky + in-flow (first child of .page) instead of absolute, so it stays pinned to
+     the viewport top while scrolling — the sub-nav's "stuck" state docks directly under
+     this bar, which only makes sense if this bar itself never scrolls away. */
+  position: sticky;
+  top: 0;
+  left: 0; width: 1920px; height: 64px;
   background: var(--color-bg-surface);
-  z-index: 10;
+  z-index: 30;
 }
 .nav-links { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
 .nav-link {
@@ -109,7 +117,18 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 }
 
 /* ================= Banner ================= */
-.banner { position: static; }
+/* Taken out of flow (was position:static) so it no longer pushes the in-flow
+   nav/sub-nav-spacer/sub-nav stack down — it paints as an absolute overlay at the
+   page's own origin (0,0), which is pixel-identical to how its children were already
+   positioned (they were always page-relative, since .banner itself was never a
+   positioning context). overflow:hidden is scoped here (see .page comment above). */
+.banner {
+  position: absolute;
+  left: 0; top: 0; width: 1920px; height: 620px; /* tall enough to fully contain
+    banner-visual.png (bottom edge at y≈604px) — only the top bleed (y<0) needs
+    clipping, this must not also cut off content that was always meant to show */
+  overflow: hidden;
+}
 .banner-base {
   position: absolute;
   background: linear-gradient(90deg, #E1E7FF 0%, rgba(182, 197, 254, 0.05) 10.2%, rgba(221, 233, 255, 0.05) 88%, #DED1FD 96.2%);
@@ -256,8 +275,70 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   color: #2E53FA;
 }
 .sp-view-all:hover { text-decoration: underline; }
-.subnav { position: absolute; background: transparent; }
-.subnav-item { position: absolute; font-size: 16px; line-height: 19.2px; white-space: nowrap; }
+/* ================= Sub-nav：吸顶 + 内容形变 =================
+   来源 Figma 节点 120:205（默认态，副导航叠在 banner 渐变衬底上，居中排列）
+   与 207:24512（"开发者学习中心-向下滚动"，副导航吸附在一级导航正下方，
+   左侧品牌标签+分隔线，居左排列，右侧"我的学伴"胶囊）。
+
+   .subnav-flow-spacer 把 .subnav 在文档流中的自然位置推到 y=343（等于原来
+   absolute 的 top:343），这样 position:sticky 在未吸附时视觉位置和原设计
+   完全一致；一级导航高度 64px，所以 .subnav 的 sticky top 也是 64px，吸附
+   后正好贴在一级导航下方。#subnavSentinel 放在 spacer 末尾（也就是 .subnav
+   吸附前的自然位置），IntersectionObserver 用 rootMargin:-64px 顶部收缩量
+   来匹配同一个吸附临界点，一旦哨兵离开这个收缩后的视口顶部就加上 .stuck。 */
+.subnav-flow-spacer { height: 279px; }
+.subnav {
+  position: sticky;
+  top: 64px;
+  z-index: 20;
+  width: 1920px;
+  height: 56px;
+  background: transparent;
+  transition: background 0.25s ease, box-shadow 0.25s ease, height 0.25s ease;
+}
+.subnav.stuck {
+  background: var(--color-bg-surface);
+  height: 60px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 12px rgba(16, 24, 40, 0.06);
+}
+.subnav-inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  width: 1488px;
+  height: 100%;
+  margin: 0 auto;
+  padding-left: 432px; /* 未吸附时用 padding 模拟原设计的居中效果，因为 padding
+                           可以平滑过渡，justify-content 的关键字切换不行 */
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0%, #fff 31%, rgba(255, 255, 255, 0.8) 68%, rgba(255, 255, 255, 0) 100%);
+  transition: padding-left 0.25s ease, background 0.25s ease;
+}
+.subnav.stuck .subnav-inner { padding-left: 0; background: none; }
+.subnav-item { position: static; font-size: 16px; line-height: 19.2px; white-space: nowrap; }
+.subnav-brand {
+  display: none;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  flex: none;
+  white-space: nowrap;
+}
+.subnav-divider { display: none; width: 1px; height: 24px; background: var(--color-border-default); flex: none; }
+.subnav.stuck .subnav-brand, .subnav.stuck .subnav-divider { display: flex; }
+.subnav-badge {
+  flex: none;
+  margin-left: auto;
+  border-radius: 999px;
+  padding: 5px 20px;
+  font-size: 14px;
+  color: #730CFF;
+  background: linear-gradient(115deg, rgba(223, 212, 251, 0.5), rgba(222, 209, 253, 0.8));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.subnav.stuck .subnav-badge { opacity: 1; pointer-events: auto; }
 .float-btn {
   position: absolute;
   background: var(--color-bg-surface);

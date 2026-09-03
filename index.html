@@ -35,20 +35,29 @@
 <span class="search-icon"></span>
 <input type="text" class="search-input" id="searchInput" placeholder="今天你想学点什么" autocomplete="off" oninput="onSearchInput(this.value)" onfocus="onSearchFocus()">
 </div>
+</section>
+<!-- 搜索下拉面板挪到 .banner 外面：.banner 现在有 overflow:hidden 来裁剪
+     banner-visual 向上溢出的部分，如果面板还在里面，展开的搜索结果会被一起裁掉 -->
 <div class="search-panel" id="searchPanel" style="left:108px;top:303px;"></div>
-<div class="subnav" style="left:216.0px;top:343.0px;width:1488.0px;height:56.0px;">
-<span class="subnav-item" style="left:432.0px;top:18.0px;font-weight:600;color:var(--color-text-primary);">概览</span>
-<a class="subnav-item" href="find.html" style="left:496.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">查找学习资源</a>
-<a class="subnav-item" href="paths.html" style="left:624.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">学习路径</a>
-<a class="subnav-item" href="courses.html" style="left:720.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">自主学习课程</a>
-<a class="subnav-item" href="training.html" style="left:848.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">讲师指导培训</a>
-<a class="subnav-item" href="certification.html" style="left:976.0px;top:18.0px;font-weight:400;color:var(--color-text-secondary);">开发者认证</a>
+<div class="subnav-flow-spacer"></div>
+<div id="subnavSentinel" style="height:1px;"></div>
+<nav class="subnav" id="subnav">
+<div class="subnav-inner">
+<span class="subnav-brand">开发者学习中心</span>
+<span class="subnav-divider"></span>
+<span class="subnav-item" style="font-weight:600;color:var(--color-text-primary);">概览</span>
+<a class="subnav-item" href="find.html" style="font-weight:400;color:var(--color-text-secondary);">查找学习资源</a>
+<a class="subnav-item" href="paths.html" style="font-weight:400;color:var(--color-text-secondary);">学习路径</a>
+<a class="subnav-item" href="courses.html" style="font-weight:400;color:var(--color-text-secondary);">自主学习课程</a>
+<a class="subnav-item" href="training.html" style="font-weight:400;color:var(--color-text-secondary);">讲师指导培训</a>
+<a class="subnav-item" href="certification.html" style="font-weight:400;color:var(--color-text-secondary);">开发者认证</a>
+<button class="subnav-badge">我的学伴</button>
 </div>
+</nav>
 <button class="float-btn" style="left:1840.0px;top:1035.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
 <button class="float-btn" style="left:1840.0px;top:1079.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
 <button class="float-btn" style="left:1840.0px;top:1123.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
 <button class="float-btn" style="left:1840.0px;top:1167.0px;width:36.0px;height:36.0px;" aria-label="quick action"><span></span></button>
-</section>
 <section class="intro" id="floorDefault">
 <div class="txt" style="left:704.5px;top:439.0px;width:555.0px;height:50.0px;font-size:40.0px;line-height:50.0px;font-weight:600;color:var(--color-text-heading);text-align:center;white-space:nowrap;">什么是开发者学习中心（DLC）</div>
 <div class="intro-card" style="left:238.0px;top:529.0px;width:1488.0px;height:238.0px;"></div>
@@ -188,6 +197,23 @@
 </div>
 
 <script>
+/* ================= 副导航吸顶 + 内容形变 =================
+   用 IntersectionObserver 监听 banner 底部的哨兵元素，而不是 scroll 事件手动
+   算滚动距离阈值。rootMargin 顶部收缩 64px（一级导航的高度，也是 .subnav 的
+   sticky top 值），这样哨兵"离开视口顶部"的临界点和 .subnav 原生吸附的临界
+   点完全对齐——哨兵不可见时说明 .subnav 已经贴到一级导航下方，加上 .stuck。 */
+(function(){
+  const sentinel = document.getElementById('subnavSentinel');
+  const subnav = document.getElementById('subnav');
+  if(!sentinel || !subnav) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      subnav.classList.toggle('stuck', !entry.isIntersecting);
+    });
+  }, { rootMargin: '-64px 0px 0px 0px', threshold: 0 });
+  io.observe(sentinel);
+})();
+
 /* 数据来源：Figma 节点 165:8336 / 165:8654 / 165:8968 / 165:9280（测一测第一/二/三/四步） */
 const QUIZ_STEPS = [
   { label: '第 1 步 / 共 3 步', headerTitle: '简单三步，祝你快速开启昇腾学习之旅', question: '你是什么角色？',
