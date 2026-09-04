@@ -196,7 +196,10 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   border: 1px solid #EAECEF;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  z-index: 20;
+  /* 25：低于一级导航(30，吸顶后要始终盖住一切)，但要高于副导航(20)——
+     两者原来同为 20，同层级下按 DOM 顺序比较，.subnav 在 .search-panel
+     后面反而会盖在它上面，导致展开的搜索面板看起来和副导航"融合"了。 */
+  z-index: 25;
   overflow: hidden;
 }
 .search-panel.open { display: block; }
