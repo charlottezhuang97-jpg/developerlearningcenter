@@ -56,7 +56,69 @@
 <a class="subnav-item" href="courses.html" style="font-weight:400;color:var(--color-text-secondary);">自主学习课程</a>
 <a class="subnav-item" href="training.html" style="font-weight:400;color:var(--color-text-secondary);">讲师指导培训</a>
 <a class="subnav-item" href="certification.html" style="font-weight:400;color:var(--color-text-secondary);">开发者认证</a>
-<button class="subnav-badge">我的学伴</button>
+<div class="comp-wrap">
+<button class="subnav-badge comp-trigger" onclick="compToggle(event)">我的学伴</button>
+<div class="comp-panel" id="compPanel">
+  <div class="comp-head">
+    <img src="assets/images/companion-icon.png" alt="">
+    <span>我的学伴</span>
+    <svg class="comp-close" onclick="compClose()" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </div>
+  <div>
+    <button class="comp-sec-head" data-sec="progress" onclick="compToggleSection('progress')">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5c3-1 5-1 8 1 3-2 5-2 8-1v13c-3-1-5-1-8 1-3-2-5-2-8-1z"/></svg>
+      <span>学习进度</span>
+      <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+    <div class="comp-sec-body" id="compSec-progress">
+      <div class="comp-stat-row">
+        <div class="comp-stat-box" style="background:#FDF4FF;color:#9333EA"><b>2</b><span>学习路径</span></div>
+        <div class="comp-stat-items">
+          <a class="comp-stat-item" href="detail.html?title=算子开发工程师成长路径"><div class="row1"><span class="t">算子开发工程师成长路径</span><span class="meta"><span class="n">3/8节</span><span class="sep"></span><span class="pct">45%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:45%"></div></div></a>
+          <a class="comp-stat-item" href="detail.html?title=CANN 全栈开发路径"><div class="row1"><span class="t">CANN 全栈开发路径</span><span class="meta"><span class="n">1/6节</span><span class="sep"></span><span class="pct">20%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:20%"></div></div></a>
+        </div>
+      </div>
+      <div class="comp-stat-row">
+        <div class="comp-stat-box" style="background:#EFF6FF;color:#2E53FA"><b>2</b><span>课程</span></div>
+        <div class="comp-stat-items">
+          <a class="comp-stat-item" href="detail.html?title=Ascend C 算子开发入门"><div class="row1"><span class="t">Ascend C 算子开发入门</span><span class="meta"><span class="n">9/12节</span><span class="sep"></span><span class="pct">78%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:78%"></div></div></a>
+          <a class="comp-stat-item" href="detail.html?title=AscendCL 推理应用开发"><div class="row1"><span class="t">AscendCL 推理应用开发</span><span class="meta"><span class="n">3/9节</span><span class="sep"></span><span class="pct">33%</span></span></div><div class="comp-bar"><div class="comp-bar-fill" style="width:33%"></div></div></a>
+        </div>
+      </div>
+      <div class="comp-stat-row">
+        <div class="comp-stat-box" style="background:#FFDFC8;color:#FA832E"><b>2</b><span>开发者认证</span></div>
+        <div class="comp-stat-items">
+          <div class="comp-cert-item"><span>HCIP-AI 算子开发方向</span><span class="comp-cert-pill" style="background:#058EF0">● 考试阅卷中</span></div>
+          <div class="comp-cert-item"><span>HCIA-AI 昇腾基础认证</span><span class="comp-cert-pill" style="background:#158040">✓ 证书已发放</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button class="comp-sec-head closed" data-sec="next" onclick="compToggleSection('next')">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h13a3 3 0 013 3v13H7a3 3 0 01-3-3z"/><path d="M4 4v13a3 3 0 003 3"/></svg>
+      <span>接下来学</span>
+      <svg class="chev" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+    <div class="comp-sec-body closed" id="compSec-next">
+      <div class="comp-tabs">
+        <button class="comp-tab active" data-t="rec" onclick="compSwitchTab('rec')">推荐</button>
+        <button class="comp-tab" data-t="plan" onclick="compSwitchTab('plan')">我的计划</button>
+      </div>
+      <div class="comp-list" id="compList-rec">
+        <a class="comp-item" href="detail.html?title=矢量算子编写进阶"><div class="comp-num">1</div><div class="comp-item-body"><h5>矢量算子编写进阶</h5><p>深入 Ascend C 矢量计算 API，掌握复杂算子的实现与调试方法。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="comp-item" href="detail.html?title=Tiling 切分策略详解"><div class="comp-num">2</div><div class="comp-item-body"><h5>Tiling 切分策略详解</h5><p>理解 Tiling 基本原理，编写支持多种数据规模的自适应切分策略。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="comp-item" href="detail.html?title=融合算子开发实战"><div class="comp-num">3</div><div class="comp-item-body"><h5>融合算子开发实战</h5><p>把多个单算子合并为一个融合算子，显著降低数据搬运开销。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="comp-list closed" id="compList-plan">
+        <a class="comp-item plan" href="detail.html?title=多核并行计算"><div class="comp-num">1</div><div class="comp-item-body"><h5>多核并行计算</h5><p>利用多个 AI Core 并行协同完成大规模张量计算，掌握核间同步机制。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="comp-item plan" href="detail.html?title=Profiling 分析"><div class="comp-num">2</div><div class="comp-item-body"><h5>Profiling 分析</h5><p>使用昇腾 Profiling 工具解读算子执行时间线，定位性能热点。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+        <a class="comp-item plan" href="detail.html?title=推理开发实战"><div class="comp-num">3</div><div class="comp-item-body"><h5>推理开发实战</h5><p>把多个单算子合并为一个融合算子，显著降低数据搬运开销。</p></div><svg class="comp-item-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
 </div>
 </nav>
 <section class="intro" id="floorDefault">
@@ -221,6 +283,42 @@
   }, { rootMargin: '-64px 0px 0px 0px', threshold: 0 });
   io.observe(sentinel);
 })();
+
+/* ================= 我的学伴 下拉面板（和 find.html 等子页面同一套交互） ================= */
+function compToggle(e){
+  e.stopPropagation();
+  const panel = document.getElementById('compPanel');
+  const trigger = e.currentTarget;
+  const willOpen = !panel.classList.contains('open');
+  if(willOpen){
+    const r = trigger.getBoundingClientRect();
+    panel.style.top = (r.bottom + 10) + 'px';
+    panel.style.right = (window.innerWidth - r.right) + 'px';
+  }
+  panel.classList.toggle('open');
+}
+function compClose(){ document.getElementById('compPanel').classList.remove('open'); }
+document.addEventListener('click', e => {
+  const panel = document.getElementById('compPanel');
+  if(panel && panel.classList.contains('open') && !panel.contains(e.target) && !e.target.closest('.comp-trigger')) panel.classList.remove('open');
+});
+function compToggleSection(name){
+  const otherName = name === 'progress' ? 'next' : 'progress';
+  const currentlyOpen = !document.getElementById('compSec-' + name).classList.contains('closed');
+  const target = currentlyOpen ? otherName : name;
+  ['progress', 'next'].forEach(s => {
+    const head = document.querySelector('.comp-sec-head[data-sec="' + s + '"]');
+    const body = document.getElementById('compSec-' + s);
+    if(s === target){ head.classList.remove('closed'); body.classList.remove('closed'); }
+    else{ head.classList.add('closed'); body.classList.add('closed'); }
+  });
+}
+function compSwitchTab(name){
+  ['rec', 'plan'].forEach(t => {
+    document.querySelector('.comp-tab[data-t="' + t + '"]').classList.toggle('active', t === name);
+    document.getElementById('compList-' + t).classList.toggle('closed', t !== name);
+  });
+}
 
 /* 数据来源：Figma 节点 165:8336 / 165:8654 / 165:8968 / 165:9280（测一测第一/二/三/四步） */
 const QUIZ_STEPS = [

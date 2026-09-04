@@ -343,9 +343,9 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
 }
 .subnav-divider { display: none; width: 1px; height: 24px; background: var(--color-border-default); flex: none; }
 .subnav.stuck .subnav-brand, .subnav.stuck .subnav-divider { display: flex; }
+.subnav-inner .comp-wrap { margin-left: auto; flex: none; }
 .subnav-badge {
   flex: none;
-  margin-left: auto;
   border-radius: 999px;
   padding: 5px 20px;
   font-size: 14px;
@@ -356,6 +356,56 @@ button { font-family: inherit; border: none; background: none; cursor: pointer; 
   transition: opacity 0.25s ease;
 }
 .subnav.stuck .subnav-badge { opacity: 1; pointer-events: auto; }
+
+/* ================= 我的学伴 下拉面板（和 find.html 等子页面共用同一套
+   .comp-* 样式/交互，来源 Figma 节点 188:24234 / 188:24346 / 188:24427） ================= */
+.comp-wrap { position: relative; flex: none; }
+.comp-panel { position: fixed; width: 400px; max-height: 80vh; overflow-y: auto; background: #fff; border-radius: 16px; box-shadow: 0 16px 48px rgba(16, 24, 40, .18), 0 4px 12px rgba(16, 24, 40, .10); z-index: 200; display: none; }
+.comp-panel.open { display: block; }
+.comp-head { display: flex; align-items: center; gap: 10px; padding: 16px 20px; border-bottom: 1px solid #F3F3F3; }
+.comp-head img { width: 24px; height: 24px; flex: none; }
+.comp-head span { flex: 1; font-size: 14px; font-weight: 600; color: #101828; }
+.comp-close { width: 15px; height: 15px; flex: none; color: #99A1AF; }
+.comp-close:hover { color: #101828; }
+.comp-sec-head { width: 100%; display: flex; align-items: center; gap: 8px; padding: 14px 20px; font-size: 13px; font-weight: 600; color: #101828; }
+.comp-sec-head:hover { background: #FAFAFB; }
+.comp-sec-head .ic { width: 16px; height: 16px; flex: none; display: flex; }
+.comp-sec-head .chev { margin-left: auto; flex: none; transition: transform .2s; }
+.comp-sec-head.closed .chev { transform: rotate(180deg); }
+.comp-sec-body { padding: 0 20px 16px; max-height: 640px; overflow: hidden; transition: max-height .25s ease; }
+.comp-sec-body.closed { max-height: 0; padding-top: 0; padding-bottom: 0; }
+.comp-stat-row { display: flex; gap: 12px; padding: 11px 0; }
+.comp-stat-row + .comp-stat-row { border-top: 1px solid #F3F3F3; }
+.comp-stat-box { flex: none; width: 60px; border-radius: 10px; text-align: center; padding: 10px 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+.comp-stat-box b { font-size: 18px; font-weight: 600; line-height: 1; }
+.comp-stat-box span { font-size: 9px; font-weight: 500; }
+.comp-stat-items { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 11px; }
+.comp-stat-item { display: block; padding: 4px 6px; margin: -4px -6px; border-radius: 8px; cursor: pointer; transition: background .12s; }
+.comp-stat-item:hover { background: #F9F9F9; }
+.comp-stat-item .row1 { display: flex; align-items: center; justify-content: space-between; font-size: 11px; gap: 8px; margin-bottom: 5px; }
+.comp-stat-item .row1 .t { color: #101828; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.comp-stat-item:hover .row1 .t { text-decoration: underline; }
+.comp-stat-item .row1 .meta { display: flex; align-items: center; gap: 6px; flex: none; color: #9BA1AB; }
+.comp-stat-item .row1 .meta .sep { width: 1px; height: 9px; background: #D9D9D9; }
+.comp-stat-item .row1 .meta .pct { color: #9BA1AB; }
+.comp-bar { height: 4px; border-radius: 999px; background: #EDEDED; overflow: hidden; }
+.comp-bar-fill { height: 100%; background: #2E53FA; border-radius: 999px; }
+.comp-cert-item { display: flex; align-items: center; justify-content: space-between; font-size: 11px; color: #101828; gap: 8px; }
+.comp-cert-item + .comp-cert-item { margin-top: 9px; }
+.comp-cert-pill { flex: none; border-radius: 999px; padding: 3px 10px 3px 8px; font-size: 9px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.comp-tabs { display: flex; gap: 2px; background: #F2F3F5; border-radius: 8px; padding: 3px; margin-bottom: 12px; }
+.comp-tab { flex: 1; padding: 6px; border-radius: 6px; border: none; background: none; font-family: inherit; cursor: pointer; font-size: 12px; font-weight: 600; color: #9BA1AB; }
+.comp-tab.active { background: #fff; color: #101828; }
+.comp-list.closed { display: none; }
+.comp-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border-radius: 10px; cursor: pointer; transition: background .12s; }
+.comp-item:hover { background: #F9F9F9; }
+.comp-num { flex: none; width: 20px; height: 20px; border-radius: 50%; background: linear-gradient(135deg, #2E53FA, #7B25F4); color: #fff; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+.comp-item.plan .comp-num { background: #000; }
+.comp-item-body { flex: 1; min-width: 0; }
+.comp-item-body h5 { font-size: 12px; font-weight: 400; color: #101828; margin-bottom: 3px; }
+.comp-item:hover .comp-item-body h5 { text-decoration: underline; }
+.comp-item-body p { font-size: 10px; color: #9BA1AB; line-height: 1.5; }
+.comp-item-arrow { flex: none; color: #9BA1AB; margin-top: 3px; }
 .float-btn {
   position: absolute;
   background: var(--color-bg-surface);
