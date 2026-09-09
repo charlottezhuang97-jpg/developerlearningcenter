@@ -118,6 +118,14 @@
   .toc-pop-body{overflow-y:auto;padding:10px 10px 12px}
   .chapter-group-label{font-size:12px;color:var(--ink-3);font-weight:600;margin:var(--sp-5) 0 var(--sp-2);padding-left:4px}
   .chapter-group-label:first-of-type{margin-top:0}
+
+  /* 目录筛选：全部/含代码/课程，三态互斥；.chap/.sub 上的 data-tags 标记它
+     属于哪些类别，筛选时按 data-tags 是否包含当前选中的筛选值来隐藏/显示。
+     悬浮弹窗和常驻左栏是两份独立 DOM（内容重复，靠 dockToc 切换显示哪个），
+     筛选要同时对两边的按钮组 + 目录项生效，所以用不加限定的 querySelectorAll。 */
+  .toc-filter{display:flex;gap:2px;background:var(--bg-soft);border-radius:8px;padding:3px;margin:0 0 var(--sp-4)}
+  .toc-filter-btn{flex:1;padding:6px 0;border-radius:6px;font-size:12px;font-weight:600;color:var(--ink-2);transition:background .15s,color .15s}
+  .toc-filter-btn.active{background:var(--bg);color:var(--ink);box-shadow:var(--shadow-1)}
   .chap{display:flex;align-items:center;gap:11px;padding:10px;border-radius:var(--r-md);cursor:pointer;transition:background .15s;position:relative}
   .chap:hover{background:var(--bg-soft)}
   /* 当前项:低调的浅底 + 左侧细条,不再用品牌红铺满 */
@@ -676,15 +684,20 @@
       <h2>学习路径</h2>
       <button class="collapse-btn" onclick="undockToc()" title="收起为悬浮"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg></button>
     </div>
+    <div class="toc-filter">
+      <button class="toc-filter-btn active" data-f="all" onclick="tocFilter('all')">全部</button>
+      <button class="toc-filter-btn" data-f="code" onclick="tocFilter('code')">含代码</button>
+      <button class="toc-filter-btn" data-f="course" onclick="tocFilter('course')">课程</button>
+    </div>
     <div class="chapter-group-label">昇腾异构编程基础（速成班）</div>
-    <div class="chap done"><div class="chap-num">✓</div><div class="chap-text"><div class="t">昇腾硬件架构介绍</div><div class="s">第 1 章 · 已完成</div></div></div>
-    <div class="chap active"><div class="chap-num">2</div><div class="chap-text"><div class="t"><span class="now-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:4px"><path d="M8 5v14l11-7z"/></svg></span>CANN 软件包结构</div><div class="s">第 2 章 · 学习中</div></div></div>
-    <div class="sub"><a href="#" class="active">2.1 软件包分层</a><a href="#">2.2 驱动与运行时</a><a href="#">2.3 环境安装</a></div>
-    <div class="chap"><div class="chap-num">3</div><div class="chap-text"><div class="t">算子开发编程基础</div><div class="s">第 3 章</div></div></div>
+    <div class="chap done" data-tags="course"><div class="chap-num">✓</div><div class="chap-text"><div class="t">昇腾硬件架构介绍</div><div class="s">第 1 章 · 已完成</div></div></div>
+    <div class="chap active" data-tags="course code"><div class="chap-num">2</div><div class="chap-text"><div class="t"><span class="now-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:4px"><path d="M8 5v14l11-7z"/></svg></span>CANN 软件包结构</div><div class="s">第 2 章 · 学习中</div></div></div>
+    <div class="sub" data-tags="course code"><a href="#" class="active">2.1 软件包分层</a><a href="#">2.2 驱动与运行时</a><a href="#">2.3 环境安装</a></div>
+    <div class="chap" data-tags="course code"><div class="chap-num">3</div><div class="chap-text"><div class="t">算子开发编程基础</div><div class="s">第 3 章</div></div></div>
     <div class="chapter-group-label">Ascend C Skills 全景概览</div>
-    <div class="chap"><div class="chap-num">4</div><div class="chap-text"><div class="t">课程体系与学习路径</div><div class="s">3 节</div></div></div>
+    <div class="chap" data-tags="course"><div class="chap-num">4</div><div class="chap-text"><div class="t">课程体系与学习路径</div><div class="s">3 节</div></div></div>
     <div class="chapter-group-label">Ascend C 系列 · 算子开发入门</div>
-    <div class="chap"><div class="chap-num">5</div><div class="chap-text"><div class="t">异构架构与 Ascend C 定位</div><div class="s">第 1 节</div></div></div>
+    <div class="chap" data-tags="course"><div class="chap-num">5</div><div class="chap-text"><div class="t">异构架构与 Ascend C 定位</div><div class="s">第 1 节</div></div></div>
   </aside>
 
   <main class="main">
@@ -948,15 +961,20 @@
     <div class="dock-sw" onclick="dockToc()"><span class="switch" id="dockSwitch"></span>成为左栏常驻</div>
   </div>
   <div class="toc-pop-body">
+    <div class="toc-filter">
+      <button class="toc-filter-btn active" data-f="all" onclick="tocFilter('all')">全部</button>
+      <button class="toc-filter-btn" data-f="code" onclick="tocFilter('code')">含代码</button>
+      <button class="toc-filter-btn" data-f="course" onclick="tocFilter('course')">课程</button>
+    </div>
     <div class="chapter-group-label">昇腾异构编程基础（速成班）</div>
-    <div class="chap done"><div class="chap-num">✓</div><div class="chap-text"><div class="t">昇腾硬件架构介绍</div><div class="s">第 1 章 · 已完成</div></div></div>
-    <div class="chap active"><div class="chap-num">2</div><div class="chap-text"><div class="t"><span class="now-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:4px"><path d="M8 5v14l11-7z"/></svg></span>CANN 软件包结构</div><div class="s">第 2 章 · 学习中</div></div></div>
-    <div class="sub"><a href="#" class="active">2.1 软件包分层</a><a href="#">2.2 驱动与运行时</a><a href="#">2.3 环境安装</a></div>
-    <div class="chap"><div class="chap-num">3</div><div class="chap-text"><div class="t">算子开发编程基础</div><div class="s">第 3 章</div></div></div>
+    <div class="chap done" data-tags="course"><div class="chap-num">✓</div><div class="chap-text"><div class="t">昇腾硬件架构介绍</div><div class="s">第 1 章 · 已完成</div></div></div>
+    <div class="chap active" data-tags="course code"><div class="chap-num">2</div><div class="chap-text"><div class="t"><span class="now-ic"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:-1px;margin-right:4px"><path d="M8 5v14l11-7z"/></svg></span>CANN 软件包结构</div><div class="s">第 2 章 · 学习中</div></div></div>
+    <div class="sub" data-tags="course code"><a href="#" class="active">2.1 软件包分层</a><a href="#">2.2 驱动与运行时</a><a href="#">2.3 环境安装</a></div>
+    <div class="chap" data-tags="course code"><div class="chap-num">3</div><div class="chap-text"><div class="t">算子开发编程基础</div><div class="s">第 3 章</div></div></div>
     <div class="chapter-group-label">Ascend C Skills 全景概览</div>
-    <div class="chap"><div class="chap-num">4</div><div class="chap-text"><div class="t">课程体系与学习路径</div><div class="s">3 节</div></div></div>
+    <div class="chap" data-tags="course"><div class="chap-num">4</div><div class="chap-text"><div class="t">课程体系与学习路径</div><div class="s">3 节</div></div></div>
     <div class="chapter-group-label">Ascend C 系列 · 算子开发入门</div>
-    <div class="chap"><div class="chap-num">5</div><div class="chap-text"><div class="t">异构架构与 Ascend C 定位</div><div class="s">第 1 节</div></div></div>
+    <div class="chap" data-tags="course"><div class="chap-num">5</div><div class="chap-text"><div class="t">异构架构与 Ascend C 定位</div><div class="s">第 1 节</div></div></div>
   </div>
 </div>
 
@@ -1261,6 +1279,21 @@ print(result.stdout)</div>
   function closeToc(){document.getElementById('tocPop').classList.remove('open');document.getElementById('tocTrigger').classList.remove('on');}
   function dockToc(){document.getElementById('layout').classList.add('docked-toc');document.body.classList.add('toc-docked');document.getElementById('dockSwitch').classList.add('on');closeToc();}
   function undockToc(){document.getElementById('layout').classList.remove('docked-toc');document.body.classList.remove('toc-docked');document.getElementById('dockSwitch').classList.remove('on');}
+  function tocFilter(f){
+    document.querySelectorAll('.toc-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.f === f));
+    document.querySelectorAll('.chap, .sub').forEach(item => {
+      const tags = (item.dataset.tags || '').split(' ');
+      item.style.display = (f === 'all' || tags.includes(f)) ? '' : 'none';
+    });
+    document.querySelectorAll('.chapter-group-label').forEach(label => {
+      let el = label.nextElementSibling, anyVisible = false;
+      while (el && !el.classList.contains('chapter-group-label')) {
+        if (el.style.display !== 'none') anyVisible = true;
+        el = el.nextElementSibling;
+      }
+      label.style.display = anyVisible ? '' : 'none';
+    });
+  }
   /* 点击外部收起浮窗 */
   document.addEventListener('click',e=>{const pop=document.getElementById('tocPop'),tr=document.getElementById('tocTrigger');if(pop.classList.contains('open')&&!pop.contains(e.target)&&!tr.contains(e.target)){closeToc();}});
 
